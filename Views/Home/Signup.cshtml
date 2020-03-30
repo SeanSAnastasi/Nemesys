@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "Signup";
+}
+
+<h1>Signup</h1>
+
+<form action="" method="post">
+    <div class="imgcontainer">
+        <img src="img_avatar2.png" alt="Avatar" class="avatar">
+    </div>
+
+    <div class="container">
+
+        <label for="email"><b>Email Address</b></label>
+        <input type="text" placeholder="john@example.com" name="email" required>
+
+        <label for="emailconf"><b>Confirm Email Address</b></label>
+        <input type="text" placeholder="john@example.com" name="emailconf" required>
+
+        <label for="uname"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="uname" required>
+
+        <input type="radio" id="reporter" name="acc-type" value="reporter">
+        <label for="reporter">Reporter</label><br>
+        <input type="radio" id="investigator" name="acc-type" value="investigator">
+        <label for="investigator">Investigator</label><br>
+
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="psw" required>
+
+        <label for="pswconf"><b>Confirm Password</b></label>
+        <input type="password" placeholder="Enter Password" name="pswconf" required>
+
+        <button type="submit">Create Account</button>
+
+    </div>
+</form>
