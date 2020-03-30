@@ -86,3 +86,10 @@ body {
 #white {
     color: white;
 }
+#eye{
+    color:white;
+}
+#eye:hover{
+    transition-delay:1s;
+    color:purple;
+}
