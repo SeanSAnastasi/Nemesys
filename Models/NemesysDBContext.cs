@@ -14,7 +14,7 @@ namespace Nemesys.Models
         }
         public DbSet<Investigation> Investigation { get; set; }
         public DbSet<Investigator> Investigator { get; set; }
-        public DbSet<Reporter> ReporterModel { get; set; }
+        public DbSet<Reporter> Reporter { get; set; }
 
     }
 }
