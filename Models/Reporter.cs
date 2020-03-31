@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Nemesys.Models
 {
-    public class ReporterModel
+    public class Reporter
     {
         public int Id { get; set; }
         public String Email { get; set; }
@@ -14,5 +14,6 @@ namespace Nemesys.Models
         public int ActiveReports { get; set; }
         public int HandledReports { get; set; }
         public int PendingReports { get; set; }
+        public byte[] ProfileImage { get; set; }
     }
 }

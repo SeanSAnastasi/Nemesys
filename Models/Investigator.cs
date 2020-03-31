@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Nemesys.Models
 {
-    public class InvestigatorModel
+    public class Investigator
     {
         public int Id { get; set; }
         public String Email { get; set; }
@@ -13,6 +13,6 @@ namespace Nemesys.Models
         public String Username { get; set; }
         public int ActiveInvestigations { get; set; }
         public int TotalInvestigations { get; set; }
-
+        public byte[] ProfileImage { get; set; }
     }
 }

@@ -12,9 +12,9 @@ namespace Nemesys.Models
         {
 
         }
-        public DbSet<InvestigationModel> InvestigationModel { get; set; }
-        public DbSet<InvestigatorModel> InvestigatorModel { get; set; }
-        public DbSet<ReporterModel> ReporterModel { get; set; }
+        public DbSet<Investigation> Investigation { get; set; }
+        public DbSet<Investigator> Investigator { get; set; }
+        public DbSet<Reporter> ReporterModel { get; set; }
 
     }
 }
