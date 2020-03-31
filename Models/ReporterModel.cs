@@ -14,5 +14,8 @@ namespace Nemesys.Models
         public int ActiveReports { get; set; }
         public int HandledReports { get; set; }
         public int PendingReports { get; set; }
+        
+        public string phone { get; set; }
     }
+   
 }
