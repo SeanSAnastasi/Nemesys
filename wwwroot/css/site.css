@@ -81,7 +81,10 @@ body {
 }
 .gray {
     background-color: rgb(112, 112, 112);
-   
+    
+}
+.gray:hover{
+    color:black;
 }
 #white {
     color: white;
