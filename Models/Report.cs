@@ -8,17 +8,15 @@ namespace Nemesys.Models
     public class Report
     {
         public int Id { get; set; }
-        public int ReporterId { get; set; }
+        public Reporter Reporter { get; set; }
 
-        public int ReportId { get; set; }
-        public int date { get; set; }
-        public string status { get; set; }
-        public string location { get; set; }
-        public string Description { get; set; }
-        public string imageLocation { get; set; }
+        public String Title { get; set; }
+        public DateTime Date { get; set; }
+        public String Status { get; set; }
+        public String Location { get; set; }
+        public String Description { get; set; }
+        public byte[] ImageLocation { get; set; }
         public int Likes { get; set; }
-        public string email { get; set; }
-        public string phone { get; set; }
 
     }
 }
