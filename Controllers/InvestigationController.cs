@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nemesys.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nemesys.Controllers
 {
@@ -17,15 +18,15 @@ namespace Nemesys.Controllers
             _context.Dispose();
         }
 
-        public InvestigationController()
+        public InvestigationController(NemesysDBContext context)
         {
-            _context = new NemesysDBContext();
+            _context = context;
             
         }
         public IActionResult Index()
         {
 
-            var investigation = _context.Investigation;
+            var investigation = _context.Investigation.Include(c=>c.Report);
             Console.WriteLine(investigation.ToString());
             return View(investigation);
         }

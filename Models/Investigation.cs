@@ -10,12 +10,12 @@ namespace Nemesys.Models
     {
         public int Id { get; set; }
         [Required]
-        public int ReporterId { get; set; }
+        public Reporter Reporter { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
 
-        public int ReportId { get; set; }
+        public Report Report { get; set; }
         [Required]
-        public int InvestigatorId { get; set; }
+        public Investigator Investigator { get; set; }
     }
 }

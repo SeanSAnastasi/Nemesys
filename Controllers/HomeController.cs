@@ -21,9 +21,9 @@ namespace Nemesys.Controllers
             _context.Dispose();
         }
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, NemesysDBContext context)
         {
-            _context = new NemesysDBContext();
+            _context = context;
             _logger = logger;
         }
 

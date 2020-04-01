@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Investigations";
 }
+
     <div class="container">
         <h1>Investigations</h1>
                   
@@ -15,11 +16,11 @@
                     </div>
                     <div class="investigation-right">
                         <div class="investigation-details">
-                            <p class="investigation-description">THIS IS THE DESCRIPTION</p>
+                            <p class="investigation-description">@investigation.Report.Description</p>
                             <button>Investigate</button>
                         </div>
                         <div class="investigation-status">
-                            <p>Status</p>
+                            <p>@investigation.Report.Status</p>
                         </div>
                         
                     </div>
