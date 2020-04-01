@@ -36,7 +36,7 @@ namespace Nemesys.Controllers
         {
             return View();
         }
-        public IActionResult Reports()
+        public IActionResult Report()
         {
             return View();
         }
