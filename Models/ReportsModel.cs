@@ -18,7 +18,6 @@ namespace Nemesys.Models
         public string imageLocation { get; set; }
         public int Likes { get; set; }
         public string email { get; set; }
-
         public string phone { get; set; }
 
     }
