@@ -12,9 +12,18 @@ namespace Nemesys.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private NemesysDBContext _context;
+
+        
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
 
         public HomeController(ILogger<HomeController> logger)
         {
+            _context = new NemesysDBContext();
             _logger = logger;
         }
 
@@ -25,7 +34,11 @@ namespace Nemesys.Controllers
 
         public IActionResult Privacy()
         {
-            return View();
+
+            var reporters = _context.Reporter;
+
+
+            return View(reporters);
         }
 
         public IActionResult Login()
