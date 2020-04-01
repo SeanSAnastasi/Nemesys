@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Nemesys.Models
 {
-    public class ReportsModel
+    public class Report
     {
         public int Id { get; set; }
         public int ReporterId { get; set; }
