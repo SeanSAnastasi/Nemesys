@@ -26,13 +26,16 @@ namespace Nemesys.Controllers
         public IActionResult Index()
         {
 
-            var investigation = _context.Investigation.Include(c=>c.Report).ToList();
+            var investigation = _context.Investigation.Include(investigation => investigation.Report).ToList();
             Console.WriteLine(investigation.ToString());
             return View(investigation);
         }
         public IActionResult Details(int id)
         {
-            var investigation = _context.Investigation.Include("Report").SingleOrDefault(c => c.Id == id);
+            var investigation = _context.Investigation.Include(investigation => investigation.Report)
+                                                        .Include(investigation => investigation.Reporter)
+                                                            .Include(investigation => investigation.Investigator)
+                                                                .SingleOrDefault(c => c.Id == id);
             if (investigation == null)
             {
                 return NotFound();
