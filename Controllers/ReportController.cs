@@ -29,5 +29,17 @@ namespace Nemesys.Controllers
             
             return View(report);
         }
+
+        public IActionResult Details(int id)
+        {
+            var report = _context.Report.Include(report => report.Reporter)
+                                                                .SingleOrDefault(c => c.Id == id);
+            if (report == null)
+            {
+                return NotFound();
+            }
+            return View(report);
+        }
+
     }
 }
