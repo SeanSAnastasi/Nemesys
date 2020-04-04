@@ -12,6 +12,9 @@ namespace Nemesys.Models
 
         public String Title { get; set; }
         public DateTime Date { get; set; }
+        
+        public String HazardType { get; set; }
+
         public String Status { get; set; }
         public String Location { get; set; }
         public String Description { get; set; }
