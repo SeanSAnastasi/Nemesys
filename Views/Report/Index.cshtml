@@ -1,7 +1,27 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Reports";
 }
+<div class="container">
+    <h1>Reports</h1>
+    
+    @foreach(var report in Model)
+    {
 
-<h1>Index</h1>
+<div class="container">
+    <div class="container">
+        <h4>@report.Title</h4>
+        <p>@report.Description</p>
+    </div>
+    <div class="container">
+        <button>Edit</button>
+        <button>Delete</button>
+        <button>@report.Likes</button>
+    </div>
+
+</div>
+
+    }
+</div>
+
 
