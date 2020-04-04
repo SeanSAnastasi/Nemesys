@@ -33,7 +33,7 @@ namespace Nemesys.Controllers
         public IActionResult Details(int id)
         {
             var report = _context.Report.Include(report => report.Reporter)
-                                                                .SingleOrDefault(c => c.Id == id);
+                                            .SingleOrDefault(c => c.Id == id);
             if (report == null)
             {
                 return NotFound();
