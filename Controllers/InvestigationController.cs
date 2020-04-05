@@ -30,6 +30,7 @@ namespace Nemesys.Controllers
             Console.WriteLine(investigation.ToString());
             return View(investigation);
         }
+
         public IActionResult Details(int id)
         {
             var investigation = _context.Investigation.Include(investigation => investigation.Report)
