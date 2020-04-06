@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20200405223258_NormalizeUsers.Designer.cs" />
     <Compile Remove="Migrations\20200405224030_NormalizeUsers.cs" />
     <Compile Remove="Migrations\20200405224030_NormalizeUsers.Designer.cs" />
+    <Compile Remove="Migrations\20200406001845_RestoreDatabase.cs" />
+    <Compile Remove="Migrations\20200406001845_RestoreDatabase.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

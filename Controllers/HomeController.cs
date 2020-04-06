@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Nemesys.Models;
+using Nemesys.ViewModels;
 
 namespace Nemesys.Controllers
 {
@@ -47,14 +48,32 @@ namespace Nemesys.Controllers
         }
         public IActionResult Signup()
         {
-            return View();
+            var viewModel = new CreateUserErrorsViewModel();
+            return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Create(User user,String confirm_email,String confirm_password)
+        public ActionResult Create(User user,String confirmEmail,String confirmPassword)
         {
+            
+            if(user.Email != confirmEmail || user.Password != confirmPassword)
+            {
+
+
+                var viewModel = new CreateUserErrorsViewModel
+                {
+                    OriginalEmail = user.Email,
+                    OriginalUsername = user.Username
+                };
+                if (user.Email != confirmEmail)
+                    viewModel.EmailIncorrect = true;
+                if (user.Password != confirmPassword)
+                    viewModel.PasswordIncorrect = true;
+                return View("Signup",viewModel);
+            }
+
             _context.User.Add(user);
-            _context.SaveChanges();
+            
             Reporter reporter = new Reporter
             {
                 User = user,
@@ -63,7 +82,8 @@ namespace Nemesys.Controllers
                 HandledReports = 0
             };
             _context.Reporter.Add(reporter);
-            return View();
+            _context.SaveChanges();
+            return RedirectToAction("Index","Home");
         }
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

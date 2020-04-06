@@ -1,6 +1,26 @@
-﻿
+﻿@model Nemesys.ViewModels.CreateUserErrorsViewModel;
 @{
     ViewData["Title"] = "Signup";
+    var emailClass = "";
+    var passClass = "";
+    var emailValue = "";
+    var userValue = "";
+}
+@if (Model.EmailIncorrect)
+{
+    emailClass = "inputError";
+}
+@if (Model.PasswordIncorrect)
+{
+    passClass = "inputError";
+}
+@if (Model.OriginalEmail != null)
+{
+    emailValue = "value = " + Model.OriginalEmail;
+}
+@if (Model.OriginalUsername != null)
+{
+    userValue = "value = " + Model.OriginalUsername;
 }
 
 <h1>Sign-Up</h1>
@@ -9,28 +29,35 @@
     <div class="imgcontainer">
         <img src="img_avatar2.png" alt="Avatar" class="avatar">
     </div>
-
+    @if (Model.EmailIncorrect)
+    {
+        <p class="alert-danger">Email does not match</p>
+    }
     <div class="form-group">
         <label for="email">E-mail Address</label><br>
-        <input type="email" id="email" name="email" required placeholder="john@example.com"><br>
+        <input class="@emailClass" type="email" id="email" name="email" required placeholder="john@example.com" @emailValue><br>
     </div>
     <div class="form-group">
         <label for="confirm-email">Confirm E-mail Address</label><br>
-        <input type="email" id="confirm-email" name="confirm-email" required placeholder="john@example.com"><br>
+        <input class="@emailClass" type="email" id="confirm-email" name="confirmEmail" required placeholder="john@example.com"><br>
     </div>
     <div class="form-group">
         <label for="username">Username</label><br>
-        <input type="text" id="uname" name="username" required placeholder="Username"><br>
+        <input type="text" id="uname" name="username" required placeholder="Username" @userValue><br>
     </div>
+    @if (Model.PasswordIncorrect)
+    {
+        <p class="alert-danger">Password does not match</p>
+    }
     <div class="form-group">
         <label for="password">Password</label><br>
-        <input type="password" id="password" name="password" required placeholder="Password"><br>
+        <input class="@passClass" type="password" id="password" name="password" required placeholder="Password"><br>
     </div>
     <div class="form-group">
         <label for="confirm-password">Confirm Password</label><br>
-        <input type="password" id="confirm-password" name="confirm-password" required placeholder="Password"><br>
+        <input class="@passClass" type="password" id="confirm-password" name="confirmPassword" required placeholder="Password"><br>
     </div>
-    
-        <input type="submit" value="Submit" class="btn btn-primary">
-    
+
+    <input type="submit" value="Submit" class="btn btn-primary">
+
 </form>
