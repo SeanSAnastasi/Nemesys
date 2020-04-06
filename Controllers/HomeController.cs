@@ -49,6 +49,22 @@ namespace Nemesys.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public ActionResult Create(User user,String confirm_email,String confirm_password)
+        {
+            _context.User.Add(user);
+            _context.SaveChanges();
+            Reporter reporter = new Reporter
+            {
+                User = user,
+                ActiveReports = 0,
+                PendingReports = 0,
+                HandledReports = 0
+            };
+            _context.Reporter.Add(reporter);
+            return View();
+        }
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

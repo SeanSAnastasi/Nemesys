@@ -5,6 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200405222355_NormalizeUsers.cs" />
+    <Compile Remove="Migrations\20200405222355_NormalizeUsers.Designer.cs" />
+    <Compile Remove="Migrations\20200405223132_NormalizeUsers.cs" />
+    <Compile Remove="Migrations\20200405223132_NormalizeUsers.Designer.cs" />
+    <Compile Remove="Migrations\20200405223258_NormalizeUsers.cs" />
+    <Compile Remove="Migrations\20200405223258_NormalizeUsers.Designer.cs" />
+    <Compile Remove="Migrations\20200405224030_NormalizeUsers.cs" />
+    <Compile Remove="Migrations\20200405224030_NormalizeUsers.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
 
     <PackageReference Include="EntityFramework" Version="6.4.0" />
 

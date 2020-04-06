@@ -5,39 +5,32 @@
 
 <h1>Sign-Up</h1>
 
-<form action="" method="post">
+<form asp-controller="Home" asp-action="Create" method="post">
     <div class="imgcontainer">
         <img src="img_avatar2.png" alt="Avatar" class="avatar">
     </div>
 
-    <div class="container">
-
-        <label for="email"><b>Email Address</b></label>
-        <input type="text" placeholder="john@example.com" name="email" required>
-
-        <label for="emailconf"><b>Confirm Email Address</b></label>
-        <input type="text" placeholder="john@example.com" name="emailconf" required>
-
-        <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname" required>
-
-
-        <div>
-            <input type="radio" id="reporter" name="acc-type" value="reporter">
-            <label for="reporter">Reporter</label><br>
-        </div>
-        <div>
-            <input type="radio" id="investigator" name="acc-type" value="investigator">
-            <label for="investigator">Investigator</label><br>
-        </div>
-
-        <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
-
-        <label for="pswconf"><b>Confirm Password</b></label>
-        <input type="password" placeholder="Enter Password" name="pswconf" required>
-
-        <button type="submit">Create Account</button>
-
-        </div>
+    <div class="form-group">
+        <label for="email">E-mail Address</label><br>
+        <input type="email" id="email" name="email" required placeholder="john@example.com"><br>
+    </div>
+    <div class="form-group">
+        <label for="confirm-email">Confirm E-mail Address</label><br>
+        <input type="email" id="confirm-email" name="confirm-email" required placeholder="john@example.com"><br>
+    </div>
+    <div class="form-group">
+        <label for="username">Username</label><br>
+        <input type="text" id="uname" name="username" required placeholder="Username"><br>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password" required placeholder="Password"><br>
+    </div>
+    <div class="form-group">
+        <label for="confirm-password">Confirm Password</label><br>
+        <input type="password" id="confirm-password" name="confirm-password" required placeholder="Password"><br>
+    </div>
+    
+        <input type="submit" value="Submit" class="btn btn-primary">
+    
 </form>
