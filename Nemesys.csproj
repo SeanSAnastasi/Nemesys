@@ -5,8 +5,35 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200405222355_NormalizeUsers.cs" />
+    <Compile Remove="Migrations\20200405222355_NormalizeUsers.Designer.cs" />
+    <Compile Remove="Migrations\20200405223132_NormalizeUsers.cs" />
+    <Compile Remove="Migrations\20200405223132_NormalizeUsers.Designer.cs" />
+    <Compile Remove="Migrations\20200405223258_NormalizeUsers.cs" />
+    <Compile Remove="Migrations\20200405223258_NormalizeUsers.Designer.cs" />
+    <Compile Remove="Migrations\20200405224030_NormalizeUsers.cs" />
+    <Compile Remove="Migrations\20200405224030_NormalizeUsers.Designer.cs" />
+    <Compile Remove="Migrations\20200406001845_RestoreDatabase.cs" />
+    <Compile Remove="Migrations\20200406001845_RestoreDatabase.Designer.cs" />
+    <Compile Remove="Migrations\20200419155340_CreateIdentitySchema.cs" />
+    <Compile Remove="Migrations\20200419155340_CreateIdentitySchema.Designer.cs" />
+    <Compile Remove="Migrations\20200419155724_CreateIdentitySchema.cs" />
+    <Compile Remove="Migrations\20200419155724_CreateIdentitySchema.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
 
     <PackageReference Include="EntityFramework" Version="6.4.0" />
+
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
+
+    <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.3" />
+
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.3" />
+
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
+
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.1" />
 
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
 

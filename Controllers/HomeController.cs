@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Nemesys.Areas.Identity.Data;
 using Nemesys.Models;
+using Nemesys.ViewModels;
 
 namespace Nemesys.Controllers
 {
@@ -25,6 +27,7 @@ namespace Nemesys.Controllers
         {
             _context = context;
             _logger = logger;
+
         }
 
         public IActionResult Index()
@@ -41,14 +44,8 @@ namespace Nemesys.Controllers
             return View(reporters);
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
-        public IActionResult Signup()
-        {
-            return View();
-        }
+        
+       
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
