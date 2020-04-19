@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Nemesys.Areas.Identity.Data;
 using Nemesys.Models;
 using Nemesys.ViewModels;
 
@@ -26,6 +27,7 @@ namespace Nemesys.Controllers
         {
             _context = context;
             _logger = logger;
+
         }
 
         public IActionResult Index()
@@ -42,49 +44,8 @@ namespace Nemesys.Controllers
             return View(reporters);
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
-        public IActionResult Signup()
-        {
-            var viewModel = new CreateUserErrorsViewModel();
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public ActionResult Create(User user,String confirmEmail,String confirmPassword)
-        {
-            
-            if(user.Email != confirmEmail || user.Password != confirmPassword)
-            {
-
-
-                var viewModel = new CreateUserErrorsViewModel
-                {
-                    OriginalEmail = user.Email,
-                    OriginalUsername = user.Username
-                };
-                if (user.Email != confirmEmail)
-                    viewModel.EmailIncorrect = true;
-                if (user.Password != confirmPassword)
-                    viewModel.PasswordIncorrect = true;
-                return View("Signup",viewModel);
-            }
-
-            _context.User.Add(user);
-            
-            Reporter reporter = new Reporter
-            {
-                User = user,
-                ActiveReports = 0,
-                PendingReports = 0,
-                HandledReports = 0
-            };
-            _context.Reporter.Add(reporter);
-            _context.SaveChanges();
-            return RedirectToAction("Index","Home");
-        }
+        
+       
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
