@@ -3,14 +3,14 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>@Model.Title</h1>
+<h1 class="mb-5">@Model.Title</h1>
 
 
-<div class="investigation-block">
-    <div class="investigation-left">
-        <p class="investigation-date">@Model.Date</p>
-        <p class="investigation-date">@Model.Location</p>
-        <p>@Model.Status</p>
+<div class="container">
+    <div class="row">
+        <p class="col-4">@Model.Date</p>
+        <p class="col-4">Location: @Model.Location</p>
+        <p class="col-4">Status: @Model.Status</p>
     </div>
     <div class="container">@Model.HazardType</div>
 </div>
@@ -18,22 +18,23 @@
 
 <div class="flex">
     <div class="row">
-        <div class="col"> <img src="@Model.ImageLocation" alt="Alternate Text" /></div>
+        <div class="col-3"> <img src="@Model.ImageLocation" alt="Alternate Text" /></div>
+
+        <div class="col-9">@Model.Description   <div>@Model.Likes </div>   </div>
     </div>
-    <div class="col">@Model.Description   <div>@Model.Likes </div>   </div>
 </div>
 
 
-<div class="user-details">
+<div class="user-details mt-5">
 
     <div class="reporter-details text-center">
-        <h5 class="display-4">Created By</h5>
+        <h5 class="">Created By</h5>
         <div> <img src="#" alt="Alternate Text" /> </div>
         <div>
 
-            <h3 class="username">@Model.Reporter.Username</h3>
-            <h3>@Model.Reporter.Email</h3>
-
+            @* <h3 class="username">@Model.Reporter.User.UserName</h3>
+        <h3>@Model.Reporter.Email</h3>
+            *@
 
         </div>
 

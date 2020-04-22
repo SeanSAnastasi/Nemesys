@@ -3,23 +3,28 @@
     ViewData["Title"] = "Reports";
 }
 <div class="container">
-    <h1>Reports</h1>
+    <h1 class="text-center display-4  mb-3">R E P O R T S </h1>
     
     @foreach(var report in Model)
     {
 
-<div class="container">
-    <div class="container">
-        <h4>@report.Title</h4>
+<div class="report-card mt-1">
+    <div class="container row">
+        <div class="col-10"><h4>@report.Title</h4>
         <p>@report.Description</p>
+        </div>
+        <div class="col-2">   <button class="p-4 m-3 btn btn-outline-info">
+    <i class="far fa-heart"> <span class=""> @report.Likes </span>  </i>
+
+   
+</button></div>
     </div>
     <div class="container">
-        <button>Edit</button>
-        <button>Delete</button>
-        <button>@report.Likes</button>
-        <a class="details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
+        <button class="btn btn-outline-success">Edit</button>
+        <button class="btn btn-outline-danger">Delete</button>
+     
+        <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
     </div>
-
 </div>
 
     }

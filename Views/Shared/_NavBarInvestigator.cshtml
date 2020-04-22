@@ -5,7 +5,7 @@
 @inject UserManager<User> UserManager
 
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow mb-3">
+    <nav class="settotop navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow mb-3">
         <div class="row m-4 w-100">
             <div class="container d-block text-center" id="Make-single">
                 <a class="navbar-brand megrim" asp-area="" asp-controller="Home" asp-action="Index">N E M E S Y S</a>
@@ -27,14 +27,12 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Report" asp-action="Index">Reports</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Report" asp-action="Create">New Report</a>
-                    </li>
+
                     <li class="nav-item dropdown text-right">
-                        <a id="manage navbarDropdown" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" >@UserManager.GetUserName(User)</a>
+                        <a id="manage navbarDropdown" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true">@UserManager.GetUserName(User)</a>
                         <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                             <a id="manage" class="nav-link dropdown-item" aria-expanded="false" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
-                            <a class="dropdown-item" href="#">My Reports</a>
+                            <a class="dropdown-item" href="#">My Investigations</a>
                             <div class="dropdown-divider"></div>
                             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                 <button id="logout" type="submit" class="nav-link btn btn-link text-center dropdown-item">Logout</button>
