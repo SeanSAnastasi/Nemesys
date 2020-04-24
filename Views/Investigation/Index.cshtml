@@ -5,29 +5,53 @@
 }
 
     <div class="container">
-        <h1>Investigations</h1>
+        <h1 class="text-center display-4  mb-5">I N V E S T I G A T I O N S</h1>
                   
+        <div class="row text-center border-bottom pb-4">
+            <div class="col-sm-3 activated"> <a>My Investigations</a> </div>
+            <div class="col-sm-3 activated"> <a>Available</a> </div>
+            <div class="col-sm-3 activated-focused"> <a>All Investigations</a> </div>
+            <div class="col-sm-3 activated">
+
+                <form class="form-inline justify-content-center ">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input class="form-control-sm ml-4" type="text" placeholder="Search"
+                           aria-label="Search">
+                </form>
+
+
+            </div>
+        </div>
             @foreach(var investigation in Model)
             {
                 
-                <div class="investigation-block">
-                    <div class="investigation-left">
-                        <h3>PLACE TITLE HERE</h3>
-                        <p class="investigation-date">@investigation.StartDate</p>
-                    </div>
-                    <div class="investigation-right">
-                        <div class="investigation-details">
-                            <p class="investigation-description">@investigation.Report.Description</p>
-                            <button>Investigate</button>
-                            <a class="details-cta" asp-area="" asp-controller="Investigation" asp-action="Details" asp-route-id="@investigation.Id">View Details</a>
-                        </div>
+    <div class="report-card mt-3 mb-2">
+        <div class="container row">
+            <div class="col-sm-4">
+                <h4>Title</h4>
+                <p class="investigation-date">@investigation.StartDate</p>
+            </div>
 
-                        <div class="investigation-status">
-                            <p>@investigation.Report.Status</p>
-                        </div>
-                        
-                    </div>
+
+            <div class="col-sm-8">
+                <div class="investigation-details">
+                    <p class="investigation-description">@investigation.Report.Description</p>
                 </div>
+
+
+            </div>
+        </div>
+        <div class="row text-center">
+            <span class="col-2"></span>
+            <button class=" col-md-4 btn btn-outline-success">Investigate</button>
+            <a class=" col-md-4 btn btn-outline-dark details-cta details-cta " asp-area="" asp-controller="Investigation" asp-action="Details" asp-route-id="@investigation.Id">View Details</a>
+            <span class="col-2"></span>
+        </div>
+        <div class="row border-top text-center">
+            <div  class="col-sm-12 pt-4 mt-3"><p class="status">@investigation.Report.Status</p></div>
+        </div>
+
+    </div>
             }
 
         
