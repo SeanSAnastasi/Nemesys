@@ -3,42 +3,50 @@
     ViewData["Title"] = "Details";
 }
 
-<h1 class="mb-5">@Model.Title</h1>
-
-
-<div class="container">
-    <div class="row">
-        <p class="col-4">@Model.Date</p>
-        <p class="col-4">Location: @Model.Location</p>
-        <p class="col-4">Status: @Model.Status</p>
-    </div>
-    <div class="container">@Model.HazardType</div>
-</div>
-
-
-<div class="flex">
-    <div class="row">
-        <div class="col-3"> <img src="@Model.ImageLocation" alt="Alternate Text" /></div>
-
-        <div class="col-9">@Model.Description   <div>@Model.Likes </div>   </div>
-    </div>
-</div>
-
-
-<div class="user-details mt-5">
-
-    <div class="reporter-details text-center">
-        <h5 class="">Created By</h5>
-        <div> <img src="#" alt="Alternate Text" /> </div>
-        <div>
-
-            @* <h3 class="username">@Model.Reporter.User.UserName</h3>
-        <h3>@Model.Reporter.Email</h3>
-            *@
-
+    <div class="container report-details border">
+        <div class="row">
+            <h1 class="mb-5 mt-3 col-sm-8">@Model.Title</h1>
+            <div class="text-left  col-sm-4">
+                <button class="p-3 m-2 btn btn-outline-info">
+                    <i class="far fa-heart"> <span class=""> @Model.Likes </span>  </i>
+                </button>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row text-center">
+                <p class="col-sm-4"><i class="fas fa-calendar-day"></i>@Model.Date</p>
+                <p class="col-sm-4"><i class="fas fa-map-marker-alt"></i> Location: @Model.Location</p>
+                <p class="col-sm-4">Status: @Model.Status</p>
+            </div>
+            <div class="row "><div class="col-12 text-center border-top  border-bottom p-4"><i class="fas fa-exclamation-triangle"></i> @Model.HazardType</div></div>
         </div>
 
+
+        <div class="flex">
+            <div class="row border-bottom">
+                <div class="col-sm-3 border-right report-image"> <img src="@Model.ImageLocation" alt="Alternate Text" /></div>
+
+                <div class="col-sm-9 p-3">@Model.Description    </div>
+            </div>
+        </div>
+
+
+        <div class="user-details mt-5">
+
+            <div class="reporter-details text-center">
+                <h5 class="">Created By</h5>
+                <div class="row text-center">
+                    <div class="col-sm-6 border"> <img class="report-image text-right" src="#" alt="Alternate Text" /> </div>
+                    <div class="col-sm-6">
+                        <h3 class="text-left">UsernameHere</h3>
+                        @* <h3 class="username">@Model.Reporter.User.UserName</h3>
+            <h3>@Model.Reporter.Email</h3>
+                        *@
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
     </div>
-
-
-</div>
