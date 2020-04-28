@@ -6,6 +6,8 @@ using Nemesys.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Nemesys.ViewModels;
+using Nemesys.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Nemesys.Controllers
 {
@@ -13,18 +15,23 @@ namespace Nemesys.Controllers
     {
         private  SignInManager<User> _signinManager;
         private  UserManager<User> _userManager;
-
-        public AccountController(SignInManager<User> signInManager, UserManager<User> userManager)
+        private NemesysDBContext _context;
+        public AccountController(SignInManager<User> signInManager, UserManager<User> userManager, NemesysDBContext context)
         {
             _signinManager = signInManager;
             _userManager = userManager;
+            _context = context;
+        }
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
         }
 
         public IActionResult Login()
         {
             return View();
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
@@ -50,7 +57,7 @@ namespace Nemesys.Controllers
         {
             return View();
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
@@ -62,9 +69,18 @@ namespace Nemesys.Controllers
                 };
 
                 var result = await _userManager.CreateAsync(user, registerViewModel.Password);
-
+                
                 if (result.Succeeded)
                 {
+                    Reporter reporter = new Reporter()
+                    {
+                        User = user,
+                        ActiveReports = 0,
+                        PendingReports = 0,
+                        HandledReports = 0
+                    };
+                    _context.Reporter.Add(reporter);
+                    _context.SaveChanges();
                     return RedirectToAction("Index", "Home");
                 }
 

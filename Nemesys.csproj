@@ -19,6 +19,8 @@
     <Compile Remove="Migrations\20200419155340_CreateIdentitySchema.Designer.cs" />
     <Compile Remove="Migrations\20200419155724_CreateIdentitySchema.cs" />
     <Compile Remove="Migrations\20200419155724_CreateIdentitySchema.Designer.cs" />
+    <Compile Remove="Migrations\20200428073432_InsertIdentityTables.cs" />
+    <Compile Remove="Migrations\20200428073432_InsertIdentityTables.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
