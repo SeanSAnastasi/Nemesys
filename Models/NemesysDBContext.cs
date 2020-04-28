@@ -28,6 +28,7 @@ namespace Nemesys.Models
         public DbSet<Report> Report { get; set; }
         public DbSet<User> User { get; set; }
 
+        public DbSet<Admin> Admin { get; set; }
 
     }
 }
