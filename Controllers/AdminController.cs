@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Nemesys.Areas.Identity.Data;
 using Nemesys.Models;
+using Nemesys.ViewModels;
+using System.Web;
 
 namespace Nemesys.Controllers
 {
@@ -40,6 +42,80 @@ namespace Nemesys.Controllers
                 return NotFound();
             
             
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(AdminCreate create)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var user = new User()
+                {
+                    UserName = create.UserName
+                };
+
+                var result = await _userManager.CreateAsync(user, "P@ssword123");
+
+                if (result.Succeeded)
+                {
+                    
+
+                    if (create.UserType == "Reporter")
+                    {
+                        Reporter reporter = new Reporter()
+                        {
+                            User = user,
+                            ActiveReports = 0,
+                            PendingReports = 0,
+                            HandledReports = 0
+                        };
+                        _context.Reporter.Add(reporter);
+                        _context.SaveChanges();
+                    }
+                    else if(create.UserType == "Investigator")
+                    {
+                        Investigator investigator = new Investigator    ()
+                        {
+                            User = user,
+                            ActiveInvestigations = 0,
+                            TotalInvestigations = 0,
+                            
+                        };
+                        _context.Investigator.Add(investigator);
+                        _context.SaveChanges();
+                    }
+                    else if (create.UserType == "Administrator")
+                    {
+                        Admin admin = new Admin()
+                        {
+                            User = user,
+                            
+
+                        };
+                        _context.Admin.Add(admin);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", result.Errors.First().Description);
+                    }
+
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                //If registration errors exist, show the first error one on the list
+                ModelState.AddModelError("", result.Errors.First().Description);
+            }
+
+            return View(create);
         }
     }
 }
