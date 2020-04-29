@@ -11,6 +11,7 @@
 
     var reporter = _context.Reporter.SingleOrDefault(c => c.User.Id == userId);
     var investigator = _context.Investigator.SingleOrDefault(c => c.User.Id == userId);
+    var admin = _context.Admin.SingleOrDefault(c => c.User.Id == userId);
 }
 
 
@@ -28,7 +29,11 @@
         </li>
     *@
 
-    @if (investigator != null)
+    @if (admin != null)
+    {
+        <partial name="_NavBarInvestigator" />
+    }
+    else if (investigator != null)
     {
         <partial name="_NavBarInvestigator" />
     }

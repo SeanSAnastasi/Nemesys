@@ -34,7 +34,21 @@ namespace Nemesys.Controllers
                 var admin = _context.Admin.SingleOrDefault(c => c.User.Id == userId);
                 if (admin != null)
                 {
-                    return View();
+                    
+                    var report = _context.Report.Include(report => report.Reporter)
+                        .Include(report => report.Reporter.User)
+                        .OrderByDescending(c => c.Date)
+                        .ToList();
+                    var investigation = _context.Investigation.Include(investigation => investigation.Investigator)
+                        .Include(investigation => investigation.Investigator.User)
+                        .OrderByDescending(c => c.StartDate)
+                        .ToList();
+                    AdminIndex adminIndex = new AdminIndex()
+                    {
+                        Reports = report,
+                        Investigations = investigation
+                    };
+                    return View(adminIndex);
                 }
                 
             }
