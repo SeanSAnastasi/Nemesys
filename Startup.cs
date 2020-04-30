@@ -12,6 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Nemesys.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Nemesys.Services;
+using WebPWrecover.Services;
 
 namespace Nemesys
 {
@@ -31,31 +34,9 @@ namespace Nemesys
                 //.AddEntityFrameworkStores<NemesysDBContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Default SignIn settings.
-                options.SignIn.RequireConfirmedEmail = false;
-                options.SignIn.RequireConfirmedPhoneNumber = false;
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
-
-                //Lockout settings
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.AllowedForNewUsers = true;
-
-                //User settings
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-._@+";
-
-                //options.SignIn.... and more
-                options.SignIn.RequireConfirmedAccount = false;
-            });
             
-
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

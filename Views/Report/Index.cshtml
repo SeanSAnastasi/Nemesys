@@ -1,31 +1,45 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+@using Nemesys.Areas.Identity.Data
+@using System.Security.Claims;
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject NemesysDBContext _context
 @{
     ViewData["Title"] = "Reports";
+    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 <div class="container">
     <h1 class="text-center display-4  mb-3">R E P O R T S </h1>
-    
-    @foreach(var report in Model)
+
+    @foreach (var report in Model)
     {
 
-<div class="report-card mt-1">
-    <div class="container row">
-        <div class="col-10"><h4>@report.Title</h4>
-        <p>@report.Description</p>
-        </div>
-        <div class="col-2">   <button class="p-4 m-3 btn btn-outline-info">
-    <i class="far fa-heart"> <span class=""> @report.Likes </span>  </i>
+        <div class="report-card mt-1">
+            <div class="container row">
+                <div class="col-10">
+                    <h4>@report.Title</h4>
+                    <p>@report.Description</p>
+                </div>
+                <div class="col-2">
+                    <button class="p-4 m-3 btn btn-outline-info">
+                        <i class="far fa-heart"> <span class=""> @report.Likes </span>  </i>
 
-   
-</button></div>
-    </div>
-    <div class="container">
-        <button class="btn btn-outline-success">Edit</button>
-        <button class="btn btn-outline-danger">Delete</button>
-     
-        <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
-    </div>
-</div>
+
+                    </button>
+                </div>
+            </div>
+            <div class="container">
+                @if (report.Reporter.User.Id == userId)
+                {
+                    <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
+                    <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
+                }
+
+
+                <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
+            </div>
+        </div>
 
     }
 </div>

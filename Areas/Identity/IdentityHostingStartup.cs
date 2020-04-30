@@ -23,6 +23,31 @@ namespace Nemesys.Areas.Identity
 
                 services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
                     .AddEntityFrameworkStores<NemesysDBContext>();
+                services.Configure<IdentityOptions>(options =>
+                {
+                    // Default SignIn settings.
+                    
+                    options.SignIn.RequireConfirmedPhoneNumber = false;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireNonAlphanumeric = true;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequiredUniqueChars = 1;
+                    
+                    //Lockout settings
+                    options.Lockout.MaxFailedAccessAttempts = 5;
+                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                    options.Lockout.AllowedForNewUsers = true;
+
+                    //User settings
+                    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-._@+";
+                    options.User.RequireUniqueEmail = true;
+                    
+                    //options.SignIn.... and more
+                    
+                });
+
             });
         }
     }
