@@ -52,8 +52,8 @@ namespace Nemesys.Controllers
             {
                 User user = await _userManager.GetUserAsync(User);
                 Report report = _context.Report.Include(report => report.Reporter).Include(report => report.Reporter.User).SingleOrDefault(c => c.Id == id);
-
-                if (report.Reporter.User.Id == user.Id)
+                Admin admin = _context.Admin.SingleOrDefault(c => c.User.Id == user.Id);
+                if (report.Reporter.User.Id == user.Id || admin != null)
                 {
                     _context.Report.Remove(report);
                     _context.SaveChanges();
@@ -71,8 +71,8 @@ namespace Nemesys.Controllers
             {
                 User user = await _userManager.GetUserAsync(User);
                 Report report = _context.Report.Include(report => report.Reporter).Include(report => report.Reporter.User).SingleOrDefault(c => c.Id == id);
-
-                if (report.Reporter.User.Id == user.Id)
+                Admin admin = _context.Admin.SingleOrDefault(c => c.User.Id == user.Id);
+                if (report.Reporter.User.Id == user.Id || admin != null)
                 {
                     ReportViewModel reportModel = new ReportViewModel()
                     {
@@ -103,8 +103,8 @@ namespace Nemesys.Controllers
 
                 User user = await _userManager.GetUserAsync(User);
                 Report report = _context.Report.Include(report => report.Reporter).Include(report => report.Reporter.User).SingleOrDefault(c => c.Id == id);
-
-                if (report.Reporter.User.Id == user.Id)
+                Admin admin = _context.Admin.SingleOrDefault(c => c.User.Id == user.Id);
+                if (report.Reporter.User.Id == user.Id || admin != null)
                 {
                     report.Title = editReport.Title;
                     report.Description = editReport.Description;

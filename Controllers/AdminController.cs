@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Nemesys.Areas.Identity.Data;
 using Nemesys.Models;
 using Nemesys.ViewModels;
-using System.Web;
+
 
 namespace Nemesys.Controllers
 {
@@ -72,8 +72,11 @@ namespace Nemesys.Controllers
             {
                 var user = new User()
                 {
-                    UserName = create.UserName
+                    UserName = create.UserName,
+                    Email = create.UserName
+                    
                 };
+                
 
                 var result = await _userManager.CreateAsync(user, "P@ssword123");
 

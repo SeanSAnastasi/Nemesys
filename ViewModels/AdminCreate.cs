@@ -4,11 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace Nemesys.ViewModels
 {
     public class AdminCreate
     {
-        [Display(Name = "User name")]
+        [Display(Name = "User Email")]
         public String UserName { get; set; }
 
         [Display(Name = "User type")]

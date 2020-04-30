@@ -67,8 +67,8 @@ else
                     </div>
                 </div>
                 <div class="container">
-                    <button class="btn btn-outline-success">Edit</button>
-                    <button class="btn btn-outline-danger">Delete</button>
+                    <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
+                    <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
 
                     <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
                 </div>

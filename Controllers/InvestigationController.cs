@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nemesys.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Nemesys.Areas.Identity.Data;
 
 namespace Nemesys.Controllers
 {
@@ -12,16 +14,20 @@ namespace Nemesys.Controllers
     {
 
         private NemesysDBContext _context;
+        private SignInManager<User> _signInManager;
+        private UserManager<User> _userManager;
 
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
         }
 
-        public InvestigationController(NemesysDBContext context)
+        public InvestigationController(NemesysDBContext context, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _context = context;
-            
+            _signInManager = signInManager;
+            _userManager = userManager;
+
         }
         public IActionResult Index()
         {
@@ -42,6 +48,31 @@ namespace Nemesys.Controllers
                 return NotFound();
             }
             return View(investigation);
+        }
+
+        public async Task<IActionResult> Assign(int id)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                User user = await _userManager.GetUserAsync(User);
+                Report report = _context.Report.Include(report => report.Reporter).SingleOrDefault(c => c.Id == id);
+                Investigator investigator = _context.Investigator.Include(investigator => investigator.User).SingleOrDefault(c => c.User.Id == user.Id);
+                Investigation uniqueInvestigationCheck = _context.Investigation.SingleOrDefault(c => c.Report.Id == id);
+                if (investigator != null && uniqueInvestigationCheck == null)
+                {
+                    Investigation investigation = new Investigation()
+                    {
+                        Investigator = investigator,
+                        Report = report,
+                        Reporter = report.Reporter,
+                        StartDate = DateTime.UtcNow
+                    };
+                    _context.Add(investigation);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+                    return Unauthorized();
         }
     }
 }

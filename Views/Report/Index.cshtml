@@ -8,12 +8,24 @@
 @{
     ViewData["Title"] = "Reports";
     var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    Admin admin = _context.Admin.SingleOrDefault(c => c.User.Id == userId);
+    Investigator investigator = _context.Investigator.SingleOrDefault(c => c.User.Id == userId);
+    var uniqueInvestigationCheck = _context.Investigation.ToList();
+    Investigation investigationUsed = null;
 }
 <div class="container">
     <h1 class="text-center display-4  mb-3">R E P O R T S </h1>
 
     @foreach (var report in Model)
     {
+
+        foreach(var investigation in uniqueInvestigationCheck)
+        {
+            if(investigation.Report.Id == report.Id)
+            {
+                investigationUsed = investigation;
+            }
+        }
 
         <div class="report-card mt-1">
             <div class="container row">
@@ -30,12 +42,27 @@
                 </div>
             </div>
             <div class="container">
-                @if (report.Reporter.User.Id == userId)
+                @if (report.Reporter.User.Id == userId || admin != null)
                 {
                     <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
                     <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
                 }
+                @if (investigator != null || admin != null)
+                {
+                    if(investigationUsed == null)
+                    {
 
+                    
+                        if (admin != null)
+                        {
+                            <a class="btn btn-outline-info" asp-area="" asp-controller="Admin" asp-action="Assign" asp-route-id="@report.Id">Assign</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-info" asp-area="" asp-controller="Investigation" asp-action="Assign" asp-route-id="@report.Id">Assign to me</a>
+                        }
+                    }
+                }
 
                 <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
             </div>
