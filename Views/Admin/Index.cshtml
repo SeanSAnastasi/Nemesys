@@ -1,7 +1,10 @@
 ﻿@model Nemesys.ViewModels.AdminIndex
+@inject NemesysDBContext _context
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var uniqueInvestigationCheck = _context.Investigation.ToList();
+    Investigation investigationUsed = null;
 }
 <h1>Admin Page</h1>
 @if (Model.Investigations.Count == 0)
@@ -49,31 +52,44 @@ else
 }
 else
 {
-    
-        @foreach (Report report in Model.Reports)
+
+    @foreach (Report report in Model.Reports)
+    {
+        investigationUsed = null;
+        foreach (var investigation in uniqueInvestigationCheck)
         {
-            <div class="report-card mt-1">
-                <div class="container row">
-                    <div class="col-10">
-                        <h4>@report.Title</h4>
-                        <p>@report.Description</p>
-                    </div>
-                    <div class="col-2">
-                        <button class="p-4 m-3 btn btn-outline-info">
-                            <i class="far fa-heart"> <span class=""> @report.Likes </span>  </i>
+            if (investigation.Report.Id == report.Id)
+            {
+                investigationUsed = investigation;
 
+            }
 
-                        </button>
-                    </div>
+        }
+        <div class="report-card mt-1">
+            <div class="container row">
+                <div class="col-10">
+                    <h4>@report.Title</h4>
+                    <p>@report.Description</p>
                 </div>
-                <div class="container">
-                    <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
-                    <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
+                <div class="col-2">
+                    <button class="p-4 m-3 btn btn-outline-info">
+                        <i class="far fa-heart"> <span class=""> @report.Likes </span>  </i>
 
-                    <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
+
+                    </button>
                 </div>
             </div>
-        }
-    
+            <div class="container">
+                <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
+                <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
+                @if (investigationUsed == null)
+                {
+                    <a class="btn btn-outline-info" asp-area="" asp-controller="Admin" asp-action="Assign" asp-route-id="@report.Id">Assign</a>
+                }
+                <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
+            </div>
+        </div>
+    }
+
 }
 

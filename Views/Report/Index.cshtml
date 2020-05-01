@@ -18,13 +18,15 @@
 
     @foreach (var report in Model)
     {
-
+        investigationUsed = null;
         foreach(var investigation in uniqueInvestigationCheck)
         {
             if(investigation.Report.Id == report.Id)
             {
                 investigationUsed = investigation;
+                
             }
+            
         }
 
         <div class="report-card mt-1">

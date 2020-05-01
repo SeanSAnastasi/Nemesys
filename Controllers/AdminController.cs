@@ -28,13 +28,13 @@ namespace Nemesys.Controllers
         {
             if (_signinManager.IsSignedIn(User))
             {
-                
+
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 var admin = _context.Admin.SingleOrDefault(c => c.User.Id == userId);
                 if (admin != null)
                 {
-                    
+
                     var report = _context.Report.Include(report => report.Reporter)
                         .Include(report => report.Reporter.User)
                         .OrderByDescending(c => c.Date)
@@ -50,12 +50,12 @@ namespace Nemesys.Controllers
                     };
                     return View(adminIndex);
                 }
-                
+
             }
-            
-                return NotFound();
-            
-            
+
+            return NotFound();
+
+
         }
 
         [HttpGet]
@@ -74,15 +74,15 @@ namespace Nemesys.Controllers
                 {
                     UserName = create.UserName,
                     Email = create.UserName
-                    
+
                 };
-                
+
 
                 var result = await _userManager.CreateAsync(user, "P@ssword123");
 
                 if (result.Succeeded)
                 {
-                    
+
 
                     if (create.UserType == "Reporter")
                     {
@@ -96,14 +96,14 @@ namespace Nemesys.Controllers
                         _context.Reporter.Add(reporter);
                         _context.SaveChanges();
                     }
-                    else if(create.UserType == "Investigator")
+                    else if (create.UserType == "Investigator")
                     {
-                        Investigator investigator = new Investigator    ()
+                        Investigator investigator = new Investigator()
                         {
                             User = user,
                             ActiveInvestigations = 0,
                             TotalInvestigations = 0,
-                            
+
                         };
                         _context.Investigator.Add(investigator);
                         _context.SaveChanges();
@@ -113,7 +113,7 @@ namespace Nemesys.Controllers
                         Admin admin = new Admin()
                         {
                             User = user,
-                            
+
 
                         };
                         _context.Admin.Add(admin);
@@ -133,6 +133,68 @@ namespace Nemesys.Controllers
             }
 
             return View(create);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Assign(int id)
+        {
+            if (_signinManager.IsSignedIn(User))
+            {
+                User user = await _userManager.GetUserAsync(User);
+
+                Admin admin = _context.Admin.SingleOrDefault(c => c.User.Id == user.Id);
+                if (admin != null)
+                {
+                    Report report = _context.Report.SingleOrDefault(c => c.Id == id);
+                    var investigators = _context.Investigator.Include(investigators => investigators.User).ToList();
+                    AdminAssign adminAssign = new AdminAssign()
+                    {
+                        report = report,
+                        Investigators = investigators
+                    };
+                    return View(adminAssign);
+                }
+            }
+            return Unauthorized();
+        }
+
+        [Route("Admin/Assign/{reportid}/{investigatorid}")]
+        
+        public async Task<IActionResult> Assign(int reportid, int investigatorid)
+        {
+            if (_signinManager.IsSignedIn(User))
+            {
+                User user = await _userManager.GetUserAsync(User);
+
+                Admin admin = _context.Admin.SingleOrDefault(c => c.User.Id == user.Id);
+                if (admin != null)
+                {
+                    Report report = _context.Report.Include(report => report.Reporter).SingleOrDefault(c => c.Id == reportid);
+                    Investigator investigator = _context.Investigator.SingleOrDefault(c => c.Id == investigatorid);
+
+                    if(report != null && investigator != null)
+                    {
+                        Investigation investigation = new Investigation()
+                        {
+                            Report = report,
+                            Investigator = investigator,
+                            StartDate = DateTime.UtcNow,
+                            Reporter = report.Reporter                            
+                        };
+                        _context.Add(investigation);
+                        _context.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+            }
+
+                    
+            
+            return Unauthorized();
+
         }
     }
 }
