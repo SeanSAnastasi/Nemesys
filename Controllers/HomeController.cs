@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Nemesys.Areas.Identity.Data;
 using Nemesys.Models;
@@ -35,10 +36,10 @@ namespace Nemesys.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Hall_Of_Fame()
         {
 
-            var reporters = _context.Reporter;
+            List<Reporter> reporters = _context.Reporter.Include(reporters => reporters.User).OrderByDescending(c => c.HandledReports).Take(10).ToList();
 
 
             return View(reporters);

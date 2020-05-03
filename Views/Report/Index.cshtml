@@ -1,31 +1,74 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+@using Nemesys.Areas.Identity.Data
+@using System.Security.Claims;
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject NemesysDBContext _context
 @{
     ViewData["Title"] = "Reports";
+    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    Admin admin = _context.Admin.SingleOrDefault(c => c.User.Id == userId);
+    Investigator investigator = _context.Investigator.SingleOrDefault(c => c.User.Id == userId);
+    var uniqueInvestigationCheck = _context.Investigation.ToList();
+    Investigation investigationUsed = null;
 }
 <div class="container">
     <h1 class="text-center display-4  mb-3">R E P O R T S </h1>
-    
-    @foreach(var report in Model)
+
+    @foreach (var report in Model)
     {
+        investigationUsed = null;
+        foreach(var investigation in uniqueInvestigationCheck)
+        {
+            if(investigation.Report.Id == report.Id)
+            {
+                investigationUsed = investigation;
+                
+            }
+            
+        }
 
-<div class="report-card mt-1">
-    <div class="container row">
-        <div class="col-10"><h4>@report.Title</h4>
-        <p>@report.Description</p>
+        <div class="report-card mt-1">
+            <div class="container row">
+                <div class="col-10">
+                    <h4>@report.Title</h4>
+                    <p>@report.Description</p>
+                </div>
+                <div class="col-2">
+                    <button class="p-4 m-3 btn btn-outline-info">
+                        <i class="far fa-heart"> <span class=""> @report.Likes </span>  </i>
+
+
+                    </button>
+                </div>
+            </div>
+            <div class="container">
+                @if (report.Reporter.User.Id == userId || admin != null)
+                {
+                    <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
+                    <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
+                }
+                @if (investigator != null || admin != null)
+                {
+                    if(investigationUsed == null)
+                    {
+
+                    
+                        if (admin != null)
+                        {
+                            <a class="btn btn-outline-info" asp-area="" asp-controller="Admin" asp-action="Assign" asp-route-id="@report.Id">Assign</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-info" asp-area="" asp-controller="Investigation" asp-action="Assign" asp-route-id="@report.Id">Assign to me</a>
+                        }
+                    }
+                }
+
+                <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
+            </div>
         </div>
-        <div class="col-2">   <button class="p-4 m-3 btn btn-outline-info">
-    <i class="far fa-heart"> <span class=""> @report.Likes </span>  </i>
-
-   
-</button></div>
-    </div>
-    <div class="container">
-        <button class="btn btn-outline-success">Edit</button>
-        <button class="btn btn-outline-danger">Delete</button>
-     
-        <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
-    </div>
-</div>
 
     }
 </div>
