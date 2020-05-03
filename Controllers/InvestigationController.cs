@@ -32,9 +32,37 @@ namespace Nemesys.Controllers
         public IActionResult Index()
         {
 
-            var investigation = _context.Investigation.Include(investigation => investigation.Report).ToList();
+            var investigation = _context.Investigation.Include(investigation => investigation.Report)
+                .Include(investigation => investigation.Investigator)
+                .Include(investigation => investigation.Investigator.User)
+                .ToList();
             Console.WriteLine(investigation.ToString());
             return View(investigation);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                User user = await _userManager.GetUserAsync(User);
+                Admin admin = _context.Admin.SingleOrDefault(c => c.User.Id == user.Id);
+                Investigator investigator = _context.Investigator.SingleOrDefault(c => c.User.Id == user.Id);
+                if (investigator != null || admin != null)
+                {
+                    Investigation investigation = _context.Investigation
+                        .Include(investigation => investigation.Report)
+                        .Include(investigation => investigation.Reporter)
+                        .SingleOrDefault(c => c.Id == id);
+                    investigator.ActiveInvestigations--;
+                    investigation.Reporter.ActiveReports--;
+                    investigation.Reporter.HandledReports++;                    
+                    _context.Remove(investigation.Report);
+                    _context.Remove(investigation);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            return Unauthorized();
         }
 
         public IActionResult Details(int id)
@@ -67,6 +95,10 @@ namespace Nemesys.Controllers
                         Reporter = report.Reporter,
                         StartDate = DateTime.UtcNow
                     };
+                    report.Reporter.PendingReports--;
+                    report.Reporter.ActiveReports++;
+                    investigator.ActiveInvestigations++;
+                    investigator.TotalInvestigations++;
                     _context.Add(investigation);
                     _context.SaveChanges();
                     return RedirectToAction("Index");

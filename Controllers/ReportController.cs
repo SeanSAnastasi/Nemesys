@@ -53,8 +53,19 @@ namespace Nemesys.Controllers
                 User user = await _userManager.GetUserAsync(User);
                 Report report = _context.Report.Include(report => report.Reporter).Include(report => report.Reporter.User).SingleOrDefault(c => c.Id == id);
                 Admin admin = _context.Admin.SingleOrDefault(c => c.User.Id == user.Id);
+                Investigation investigation = _context.Investigation.SingleOrDefault(c => c.Report.Id == id);
+                
                 if (report.Reporter.User.Id == user.Id || admin != null)
                 {
+                    if(investigation == null)
+                    {
+                        report.Reporter.PendingReports--;
+                    }
+                    else
+                    {
+                        _context.Investigation.Remove(investigation);
+                        report.Reporter.ActiveReports--;
+                    }
                     _context.Report.Remove(report);
                     _context.SaveChanges();
                 }
@@ -156,6 +167,7 @@ namespace Nemesys.Controllers
                     Likes = 0
 
                 };
+                reporter.PendingReports++;
                 _context.Report.Add(report);
                 _context.SaveChanges();
             }
