@@ -12,6 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Nemesys.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Nemesys.Services;
+using WebPWrecover.Services;
 
 namespace Nemesys
 {
@@ -31,9 +34,11 @@ namespace Nemesys
                 //.AddEntityFrameworkStores<NemesysDBContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
-
+            
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
         }
-
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

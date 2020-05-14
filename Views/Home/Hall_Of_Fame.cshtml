@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Hall Of Fame";
+    int count = 1;
+}
+<h1>@ViewData["Title"]</h1>
+@foreach (Reporter reporter in Model)
+{
+<div class="report-card mt-1">
+    <div class="container row">
+        <div class="col-2">
+            <h4>@count</h4>
+        </div>
+        <div class="col-8">
+            <h4>@reporter.User.UserName</h4>
+            <div class="d-flex justify-content-around">
+                <div>
+                    <h4>@reporter.HandledReports</h4>
+                    <p>Handled Reports</p>
+                </div>
+                <div>
+                    <h4>@reporter.ActiveReports</h4>
+                    <p>Active Reports</p>
+                </div>
+                <div>
+                    <h4>@reporter.PendingReports</h4>
+                    <p>Pending Reports</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+    count++;
+}
