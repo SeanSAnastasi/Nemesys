@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -27,8 +28,11 @@ namespace Nemesys.Models
         public DbSet<Reporter> Reporter { get; set; }
         public DbSet<Report> Report { get; set; }
         public DbSet<User> User { get; set; }
-
         public DbSet<Admin> Admin { get; set; }
+        public DbSet<Like> Like { get; set; }
+
+        
+
 
     }
 }

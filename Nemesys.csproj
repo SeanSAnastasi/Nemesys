@@ -21,6 +21,8 @@
     <Compile Remove="Migrations\20200419155724_CreateIdentitySchema.Designer.cs" />
     <Compile Remove="Migrations\20200428073432_InsertIdentityTables.cs" />
     <Compile Remove="Migrations\20200428073432_InsertIdentityTables.Designer.cs" />
+    <Compile Remove="Migrations\20200517114646_editLike.cs" />
+    <Compile Remove="Migrations\20200517114646_editLike.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.0" />
@@ -40,5 +42,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Identity\Data\" />
+    <Folder Include="wwwroot\images\repo\" />
   </ItemGroup>
 </Project>

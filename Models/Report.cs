@@ -16,12 +16,13 @@ namespace Nemesys.Models
         [Required]
         public DateTime Date { get; set; }
         [Required]
+        [Display(Name = "HazardType")]
         public String HazardType { get; set; }
         [Required]
         public String Status { get; set; }
         public String Location { get; set; }
         public String Description { get; set; }
-        public byte[] ImageLocation { get; set; }
+        public String ImageLocation { get; set; }
         public int Likes { get; set; }
 
     }
