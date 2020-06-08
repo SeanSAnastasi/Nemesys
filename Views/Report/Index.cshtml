@@ -1,76 +1,100 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Nemesys.Areas.Identity.Data
 @using System.Security.Claims;
+@using System.Collections;
 
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 @inject NemesysDBContext _context
 @{
-    ViewData["Title"] = "Reports";
-    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-    Admin admin = _context.Admin.SingleOrDefault(c => c.User.Id == userId);
-    Investigator investigator = _context.Investigator.SingleOrDefault(c => c.User.Id == userId);
-    var uniqueInvestigationCheck = _context.Investigation.ToList();
-    Investigation investigationUsed = null;
+ ViewData["Title"] = "Reports";
+ var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+ Admin admin = _context.Admin.SingleOrDefault(c => c.User.Id == userId);
+ Investigator investigator = _context.Investigator.SingleOrDefault(c => c.User.Id == userId);
+ var uniqueInvestigationCheck = _context.Investigation.ToList();
+ ArrayList myList = new ArrayList();
+
+
+ Investigation investigationUsed = null;
 }
 <div class="container">
     <h1 class="text-center display-4  mb-3">R E P O R T S </h1>
 
-    @foreach (var report in Model)
-    {
-        investigationUsed = null;
-        foreach(var investigation in uniqueInvestigationCheck)
-        {
-            if(investigation.Report.Id == report.Id)
-            {
-                investigationUsed = investigation;
-                
-            }
-            
-        }
+    <div class="row text-center border-bottom pb-4">
+        <div id="Mine" class="col-sm-3 activated"> <a>My Investigations</a> </div>
+        <div id="Available" class="col-sm-3 activated"> <a>Available</a> </div>
+        <div id="all" class="col-sm-3 activated-focused"> <a>All Investigations</a> </div>
+        <div class="col-sm-3 activated">
 
-        <div class="report-card mt-1">
-            <div class="container row">
-                <div class="col-10">
-                    <h4>@report.Title</h4>
-                    <p>@report.Description</p>
+            <form asp-action="Index" method="post" role="form" enctype="multipart/form-data" class="form-inline justify-content-center ">
+                <div>
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <textarea class="form-control-sm ml-4" type="text" placeholder="Search"
+                              aria-label="Search" asp-route-searchS="Index" asp-for="de"></textarea>
+
+                    <button type="submit">Search</button>
                 </div>
-                <div class="col-2">
-                    <button class="p-4 m-3 btn btn-outline-info">
-                        <i class="far fa-heart"> <span class=""> @report.Likes </span>  </i>
-
-
-                    </button>
-                </div>
-            </div>
-            <div class="container">
-                @if (report.Reporter.User.Id == userId || admin != null)
-                {
-                    <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
-                    <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
-                }
-                @if (investigator != null || admin != null)
-                {
-                    if(investigationUsed == null)
-                    {
-
-                    
-                        if (admin != null)
-                        {
-                            <a class="btn btn-outline-info" asp-area="" asp-controller="Admin" asp-action="Assign" asp-route-id="@report.Id">Assign</a>
-                        }
-                        else
-                        {
-                            <a class="btn btn-outline-info" asp-area="" asp-controller="Investigation" asp-action="Assign" asp-route-id="@report.Id">Assign to me</a>
-                        }
-                    }
-                }
-
-                <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
-            </div>
+            </form>
         </div>
 
-    }
-</div>
+        @foreach (var report in Model) { myList.Add(report); }
+
+        @foreach (var report in Model)
+        {
+
+            investigationUsed = null;
+            foreach (var investigation in uniqueInvestigationCheck)
+            {
+                if (investigation.Report.Id == report.Id)
+                {
+                    investigationUsed = investigation;
+
+                }
+
+            }
+
+            <div class="report-card mt-1">
+                <div class="container row">
+                    <div class="col-10">
+                        <h4>@report.Title</h4>
+                        <p>@report.Description</p>
+                    </div>
+                    <div class="col-2">
+                        <a class="p-4 m-3 btn btn-outline-info" asp-controller="Report" asp-action="Like" asp-route-id="@report.Id">
+                            <i class="far fa-heart"> <span class=""> @report.Likes </span>  </i>
+
+
+                        </a>
+                    </div>
+                </div>
+                <div class="container">
+                    @if (report.Reporter.User.Id == userId || admin != null)
+                    {
+                        <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
+                        <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
+                    }
+                    @if (investigator != null || admin != null)
+                    {
+                        if (investigationUsed == null)
+                        {
+
+
+                            if (admin != null)
+                            {
+                                <a class="btn btn-outline-info" asp-area="" asp-controller="Admin" asp-action="Assign" asp-route-id="@report.Id">Assign</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-info" asp-area="" asp-controller="Investigation" asp-action="Assign" asp-route-id="@report.Id">Assign to me</a>
+                            }
+                        }
+                    }
+
+                    <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
+                </div>
+            </div>
+
+        }
+    </div>
 
 

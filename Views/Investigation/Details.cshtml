@@ -47,7 +47,7 @@
             <div class="reporter-details col-sm-6">
 
                 <img class="report-image text-right" src="#" alt="Alternate Text" />
-                <h3 class="username">Reporter: @Model.Reporter.Id</h3>
+                <h3 class="username">Reporter: @Model.Reporter.User.UserName</h3>
                 <p class="details">Active reports: @Model.Reporter.ActiveReports</p>
                 <p class="details">Handled reports: @Model.Reporter.HandledReports</p>
 
@@ -55,7 +55,7 @@
 
             <div class="investigator-details col-sm-6">
                 <img class="report-image text-right" src="#" alt="Alternate Text" />
-                <h3 class="username">Investigator: @Model.Investigator.Id</h3>
+                <h3 class="username">Investigator: @Model.Investigator.User.UserName</h3>
                 <p class="details">Active Investigations: @Model.Investigator.ActiveInvestigations</p>
                 <p class="details"> @(Model.Investigator.TotalInvestigations - Model.Investigator.ActiveInvestigations)</p>
             </div>

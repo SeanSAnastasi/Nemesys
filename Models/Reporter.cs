@@ -15,5 +15,7 @@ namespace Nemesys.Models
         public int HandledReports { get; set; }
         public int PendingReports { get; set; }
         public byte[] ProfileImage { get; set; }
+
+       
     }
 }

@@ -24,7 +24,7 @@
 
         <div class="flex">
             <div class="row border-bottom">
-                <div class="col-sm-3 border-right report-image"> <img src="@Model.ImageLocation" alt="Alternate Text" /></div>
+                <div class="col-sm-3 border-right report-image"> <img src="@Model.ImageLocation" class="report-image" alt="Alternate Text" asp-append-version="true"/></div>
 
                 <div class="col-sm-9 p-3">@Model.Description    </div>
             </div>
@@ -38,10 +38,12 @@
                 <div class="row text-center">
                     <div class="col-sm-6 border"> <img class="report-image text-right" src="#" alt="Alternate Text" /> </div>
                     <div class="col-sm-6">
-                        <h3 class="text-left">UsernameHere</h3>
-                        @* <h3 class="username">@Model.Reporter.User.UserName</h3>
-            <h3>@Model.Reporter.Email</h3>
-                        *@
+                        
+                            
+                         <h4 class="text-left username">@Model.Reporter.User.UserName</h4>
+
+                          <h4 class="text-left">@Model.Reporter.User.Email</h4>
+                        
 
                     </div>
                 </div>

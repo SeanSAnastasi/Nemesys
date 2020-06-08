@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Nemesys.Areas.Identity.Data;
 using Nemesys.ViewModels;
+using System.IO;
 
 namespace Nemesys.Controllers
 {
@@ -27,18 +28,26 @@ namespace Nemesys.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
         }
-        public IActionResult Index()
+        public IActionResult Index(string searchS)
         {
-            
-            var report = _context.Report.Include(report => report.Reporter).Include(report => report.Reporter.User).ToList();
-            
+            var report = _context.Report.Include(report => report.Reporter)
+                .Include(report => report.Reporter.User).ToList();
+            if (!String.IsNullOrEmpty(searchS))
+            {
+                report = _context.Report.Include(report => report.Reporter)
+                 .Include(report => report.Reporter.User).Where(r => r.Title.Contains(searchS)).ToList();
+                return View(report);
+            }
             return View(report);
         }
 
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var report = _context.Report.Include(report => report.Reporter).SingleOrDefault(c => c.Id == id);
+            var report = _context.Report
+                .Include(report => report.Reporter)
+                    .Include(report => report.Reporter.User)
+                         .SingleOrDefault(c => c.Id == id);
             if (report == null)
             {
                 return NotFound();
@@ -95,9 +104,59 @@ namespace Nemesys.Controllers
                     return View(reportModel);
                 }
             }
-
             return Unauthorized();
-            
+        }
+        
+        public async Task<IActionResult> Like( int id)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                
+                    var report = _context.Report.SingleOrDefault(d => d.Id == id);
+
+                    User user = await _userManager.GetUserAsync(User);
+                    Reporter reporter = _context.Reporter.Include(reporter => reporter.User).SingleOrDefault(d => d.User.Id == user.Id);
+
+                    if (reporter != null)
+                    {
+                        var Like = _context.Like.
+                            Include(Like => Like.Reporter)
+                                 .Include(Like => Like.Report)
+                                    .SingleOrDefault(c => (c.Reporter == reporter && c.Report == report));
+
+                    if (Like == null) // No no exist
+                    {
+                        Like newLike = new Like()
+                        {
+                            Report = report,
+                            Reporter = reporter
+                        };
+                         report.Likes++;
+                        _context.Like.Add(newLike);
+                        _context.SaveChanges();
+                    
+                        }
+                        else
+                        {
+                           
+                         report.Likes--;
+                        _context.Like.Remove(Like);
+                         _context.SaveChanges();
+                        
+                        }
+
+                    }
+
+                    /*    var Like = _context.Like
+                          .Include(Like => Like.Reporter)
+                              .Include(Like => Like.Report)
+                                  .SingleOrDefault(c => c.Id == id); */
+
+
+                    return RedirectToAction("Index");
+                
+            }
+            return Unauthorized();
         }
 
         [HttpPost]
@@ -131,12 +190,11 @@ namespace Nemesys.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            CreateReport report = new CreateReport();
+            return View(report);
         }
 
        
-
-
 
         [HttpPost]
         public async Task<IActionResult> Create([Bind("Title","Date","HazardType","Status","Location","Details","ImageLocation","Likes")] CreateReport newReport)
@@ -149,16 +207,29 @@ namespace Nemesys.Controllers
             if (_signInManager.IsSignedIn(User))
             {
 
-            
-            User user = await _userManager.GetUserAsync(User);
-            Reporter reporter = _context.Reporter.SingleOrDefault(c => c.User.Id == user.Id);
-            if(reporter != null){
+            var thispath = Directory.GetCurrentDirectory()+ "\\wwwroot\\images\\repo\\" ;
+            var fName = Path.GetFileNameWithoutExtension(newReport.ImageLocation.FileName);
+            var ext = Path.GetExtension(newReport.ImageLocation.FileName);
+                //make unique
+            var fullpath =  DateTime.Now.ToString("MMyyyyddss") + fName + ext; // seperate to make it easy to change order if needed
+                var custfullpath = thispath + fullpath;                                                  // fullpath into bits
+                using (var bits = new FileStream(custfullpath, FileMode.Create)){
+                   await newReport.ImageLocation.CopyToAsync(bits) ;
+                }    
+         
+                // var bits = new FileStream(thispath,s FileMode.Create);
+                Console.WriteLine(fullpath);
+                User user = await _userManager.GetUserAsync(User);
+                Reporter reporter = _context.Reporter.SingleOrDefault(c => c.User.Id == user.Id);
+                
+                
+                if(reporter != null){
                 Report report = new Report()
                 {
-
+                    
                     Title = newReport.Title,
                     Date = DateTime.UtcNow,
-                    //ImageLocation = newReport.ImageLocation,
+                    ImageLocation = "/images/repo/"+fullpath,
                     Status = "In Progress",
                     Description = newReport.Details,
                     Location = newReport.Location,
@@ -167,6 +238,7 @@ namespace Nemesys.Controllers
                     Likes = 0
 
                 };
+                    Console.WriteLine(newReport.HazardType);
                 reporter.PendingReports++;
                 _context.Report.Add(report);
                 _context.SaveChanges();
@@ -175,6 +247,8 @@ namespace Nemesys.Controllers
             return RedirectToAction("Index");
             
         }
+
+      
 
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nemesys.Models;
 
 namespace Nemesys.Migrations
 {
     [DbContext(typeof(NemesysDBContext))]
-    partial class NemesysDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200517123149_editLink")]
+    partial class editLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -331,8 +333,8 @@ namespace Nemesys.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageLocation")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("ImageLocation")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("Likes")
                         .HasColumnType("int");

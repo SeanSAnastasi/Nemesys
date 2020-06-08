@@ -19,6 +19,12 @@
                     <span asp-validation-for="Details" class="text-danger"></span>
                 </div>
             </div>
+            <div class="form-group text-center">
+                <label asp-for="ImageLocation" class=" wordseperate btn btn-outline-dark">Choose an image</label>
+                <div class="col-md-12">
+                    <input  asp-for="ImageLocation" accept="image/*" type="file" class="btn-block" />
+                </div>
+            </div>
             @*
         <div class="form-group">
             <label asp-for="status" class="col-md-2 wordseperate"></label>
@@ -31,15 +37,35 @@
             <div class="form-group">
                 <label asp-for="HazardType" class="col-md-2 wordseperate"></label>
                 <div class="col-md-12">
-                    <textarea asp-for="HazardType" class="form-control"></textarea>
+
+
                     <span asp-validation-for="HazardType" class="text-danger"></span>
+
+                    <select asp-for="HazardType"   class="form-control w-100">
+                        <option value="Dangerous">Dangerous</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Minimal">Minimal</option>
+                   
+                    </select>
+         
+
+                    <br />
+
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="Location" class="col-md-2 wordseperate"></label>
                 <div class="col-md-12">
-                    <textarea asp-for="Location" class="form-control"></textarea>
-                    <span asp-validation-for="Location" class="text-danger"></span>
+
+
+                    <select asp-for="Location" class="form-control w-100">
+                        <option value="Qawra">Qawra</option>
+                        <option value="Sliema">Sliema</option>
+                        <option value="Mosta">Mosta</option>
+                        <option value="Bormla">Bormla</option>
+                        <option value="Valletta">Valletta</option>
+                        <option value="Hamrun">Hamrun</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">

@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Nemesys.Models
 {
-    public class Investigation
+    public class Like
     {
+        [Required]
         public int Id { get; set; }
+
         [Required]
         public Reporter Reporter { get; set; }
-        [Required]
-        public DateTime StartDate { get; set; }
 
-        public Report Report { get; set; }
         [Required]
-        public Investigator Investigator { get; set; }
+        public Report Report { get; set; }
+      
 
     }
 }
