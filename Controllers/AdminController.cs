@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Nemesys.Areas.Identity.Data;
 using Nemesys.Models;
+using Nemesys.Services;
 using Nemesys.ViewModels;
 
 
@@ -18,11 +21,13 @@ namespace Nemesys.Controllers
         private SignInManager<User> _signinManager;
         private UserManager<User> _userManager;
         private NemesysDBContext _context;
-        public AdminController(SignInManager<User> signInManager, UserManager<User> userManager, NemesysDBContext context)
+        private IMailService _sender;
+        public AdminController(SignInManager<User> signInManager, UserManager<User> userManager, NemesysDBContext context ,IMailService sender)
         {
             _signinManager = signInManager;
             _userManager = userManager;
             _context = context;
+            _sender = sender;
         }
         public IActionResult Index()
         {
@@ -73,7 +78,7 @@ namespace Nemesys.Controllers
                 var user = new User()
                 {
                     UserName = create.UserName,
-                    Email = create.UserName
+                    Email = create.Email
 
                 };
 
@@ -124,7 +129,22 @@ namespace Nemesys.Controllers
                         ModelState.AddModelError("", result.Errors.First().Description);
                     }
 
+                    var userToEmail = await _userManager.FindByEmailAsync(create.Email);
+                    if (user == null)
+                    {
+                        return NotFound($"Unable to load user with email '{create.Email}'.");
+                    }
 
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    String EmailConfirmationUrl = Url.Page(
+                    "/Account/ConfirmEmail",
+                    pageHandler: null,
+                    values: new { area = "Identity", userId = user.Id, code = code },
+                    protocol: Request.Scheme);
+
+                    await _sender.SendEmailAsync(create.Email, "Account created", $"Your account has been created! Please make sure to log in with username {create.UserName} and password P@ssword123 and change you password immediately! Please confirm your account by <a href='{EmailConfirmationUrl}'>clicking here</a>. ");
                     return RedirectToAction("Index", "Home");
                 }
 

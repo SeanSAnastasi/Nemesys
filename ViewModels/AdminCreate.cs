@@ -9,9 +9,13 @@ namespace Nemesys.ViewModels
 {
     public class AdminCreate
     {
-        [Display(Name = "User Email")]
+        [Required]
         public String UserName { get; set; }
 
+        [Required]
+        public String Email { get; set; }
+
+        
         [Display(Name = "User type")]
         public String UserType { get; set; }
 
