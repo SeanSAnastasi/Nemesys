@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,12 +10,23 @@ namespace Nemesys.Models
     public class CreateReport
     {
         public int Id { get; set; }
+
+        [StringLength(25, MinimumLength = 10)]
+        [RegularExpression(@"^[a-zA-Z]*$")]
+        [Required]
         public string Title { get; set; }
         public Reporter Reporter { get; set; }
         //public string Hazardtype { get; set; }
-        
+
+        [RegularExpression(@"^[a-zA-Z]*$")]
+        [StringLength(1000, MinimumLength = 25)]
+        [Required]
         public string Details { get; set; }
+
         public string Location { get; set; }
+
+
+        [Required]
         public Microsoft.AspNetCore.Http.IFormFile ImageLocation { get; set; }
 
     
