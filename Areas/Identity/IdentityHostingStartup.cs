@@ -23,6 +23,7 @@ namespace Nemesys.Areas.Identity
 
                 services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<NemesysDBContext>();
+                
                 services.Configure<IdentityOptions>(options =>
                 {
                     // Default SignIn settings.

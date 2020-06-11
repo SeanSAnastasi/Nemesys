@@ -7,83 +7,83 @@
     Investigation investigationUsed = null;
 }
 
-    <p class="h2 text-center megrim p-3">Admin Page</p>
-    @if (Model.Investigations.Count == 0)
+<p class="h2 text-center megrim p-3">Admin Page</p>
+@if (Model.Investigations.Count == 0)
+{
+    <p class="h4">There are no investigations</p>
+}
+else
+{
+    <p class="h2 text-left megrim p-3">Investigations</p>
+    @foreach (Investigation investigation in Model.Investigations)
     {
-        <p class="h4">There are no investigations</p>
-    }
-    else
-    {
+        <div class="report-card mt-3 mb-2">
+            <div class="container row">
+                <div class="col-sm-4">
+                    <h4>Title</h4>
+                    <p class="investigation-date">@investigation.StartDate</p>
+                </div>
 
-        @foreach (Investigation investigation in Model.Investigations)
-        {
-            <div class="report-card mt-3 mb-2">
-                <div class="container row">
-                    <div class="col-sm-4">
-                        <h4>Title</h4>
-                        <p class="investigation-date">@investigation.StartDate</p>
+
+                <div class="col-sm-8 col-xs-12">
+
+                    <div class="investigation-detail limited-height">
+                        <p class="investigation-description">@investigation.Report.Description</p>
                     </div>
 
-
-                    <div class="col-sm-8 col-xs-12">
-
-                        <div class="investigation-detail limited-height">
-                            <p class="investigation-description">@investigation.Report.Description</p>
-                        </div>
-
-                    </div>
                 </div>
-                <div class="row text-center">
-                    <span class="col-md-3"></span>
-                    
-                    <a class=" col-md-6 btn btn-outline-dark details-cta details-cta " asp-area="" asp-controller="Investigation" asp-action="Details" asp-route-id="@investigation.Id">View Details</a>
-                    <span class="col-md-3"></span>
-                </div>
-                <div class="row border-top text-center">
-                    <div class="col-sm-12 pt-4 mt-3"><p class="status">@investigation.Report.Status</p></div>
-                </div>
-
             </div>
-        }
+            <div class="row text-center">
+                <span class="col-md-3"></span>
 
-    }
-    @if (Model.Reports.Count == 0)
-    {
-        <p class="h4">There are no reports</p>
-    }
-    else
-    {
+                <a class=" col-md-6 btn btn-outline-dark details-cta details-cta " asp-area="" asp-controller="Investigation" asp-action="Details" asp-route-id="@investigation.Id">View Details</a>
+                <span class="col-md-3"></span>
+            </div>
+            <div class="row border-top text-center">
+                <div class="col-sm-12 pt-4 mt-3"><p class="status">@investigation.Report.Status</p></div>
+            </div>
 
-        @foreach (Report report in Model.Reports)
+        </div>
+    }
+
+}
+@if (Model.Reports.Count == 0)
+{
+    <p class="h4">There are no reports</p>
+}
+else
+{
+    <p class="h2 text-left megrim p-3">Reports</p>
+    @foreach (Report report in Model.Reports)
+    {
+        investigationUsed = null;
+        foreach (var investigation in uniqueInvestigationCheck)
         {
-            investigationUsed = null;
-            foreach (var investigation in uniqueInvestigationCheck)
+            if (investigation.Report.Id == report.Id)
             {
-                if (investigation.Report.Id == report.Id)
-                {
-                    investigationUsed = investigation;
-
-                }
+                investigationUsed = investigation;
 
             }
-            <div class="report-card mt-1">
-                <div class="container row">
-                    <p class="col-sm-12 text-left h4">@report.Title - <span class="text-right"><i class="far fa-heart">  @report.Likes  </i> </span> </p>
-                    
-                    <div class="limited-height text-left col-sm-12 p-2"> <p class="rep-description">@report.Description</p> </div>
-                  
-                </div>
-                <div class="container pt-4">
-                    <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
-                    <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
-                    @if (investigationUsed == null)
-                    {
-                        <a class="btn btn-outline-info" asp-area="" asp-controller="Admin" asp-action="Assign" asp-route-id="@report.Id">Assign</a>
-                    }
-                    <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
-                </div>
-            </div>
-        }
 
+        }
+        <div class="report-card mt-1">
+            <div class="container row">
+                <p class="col-sm-12 text-left h4">@report.Title - <span class="text-right"><i class="far fa-heart">  @report.Likes  </i> </span> </p>
+
+                <div class="limited-height text-left col-sm-12 p-2"> <p class="rep-description">@report.Description</p> </div>
+
+            </div>
+            <div class="container pt-4">
+                <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
+                <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
+                @if (investigationUsed == null)
+                {
+                    <a class="btn btn-outline-info" asp-area="" asp-controller="Admin" asp-action="Assign" asp-route-id="@report.Id">Assign</a>
+                }
+                <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
+            </div>
+        </div>
     }
+
+}
 

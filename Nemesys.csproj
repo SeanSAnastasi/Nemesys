@@ -23,6 +23,8 @@
     <Compile Remove="Migrations\20200428073432_InsertIdentityTables.Designer.cs" />
     <Compile Remove="Migrations\20200517114646_editLike.cs" />
     <Compile Remove="Migrations\20200517114646_editLike.Designer.cs" />
+    <Compile Remove="Migrations\20200611212318_seedAdminDB.cs" />
+    <Compile Remove="Migrations\20200611212318_seedAdminDB.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.0" />

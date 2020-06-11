@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Nemesys.Services;
 using WebPWrecover.Services;
+using Nemesys.Seeds;
 
 namespace Nemesys
 {
@@ -36,10 +37,10 @@ namespace Nemesys
             services.AddRazorPages();
             
             services.AddTransient<IMailService, EmailSender>();
-           
+            services.AddTransient<AdminSeed>();
         }
         
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AdminSeed adminSeed)
         {
             if (env.IsDevelopment())
             {
@@ -66,6 +67,7 @@ namespace Nemesys
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            adminSeed.SeedAdmin();
         }
     }
     
