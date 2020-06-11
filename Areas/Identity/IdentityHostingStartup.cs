@@ -21,7 +21,7 @@ namespace Nemesys.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("DefaultConnection")));
 
-                services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+                services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<NemesysDBContext>();
                 services.Configure<IdentityOptions>(options =>
                 {

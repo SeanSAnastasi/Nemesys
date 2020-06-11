@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Nemesys.Areas.Identity.Data;
 using Nemesys.Models;
+using Nemesys.Services;
 
 namespace Nemesys.Areas.Identity.Pages.Account
 {
@@ -24,20 +25,20 @@ namespace Nemesys.Areas.Identity.Pages.Account
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private IMailService _mailService;
         private NemesysDBContext _context;
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
+            IMailService mailService,
             NemesysDBContext context)
         {
             
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
+            _mailService = mailService;
             _context = context;
             
         }
@@ -107,11 +108,11 @@ namespace Nemesys.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code },
                         protocol: Request.Scheme);
 
-                //    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                  //      $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                   
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
+                        
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email });
                     }
                     else

@@ -1,43 +1,44 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Nemesys.Services;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System;
 using System.Threading.Tasks;
 
 namespace WebPWrecover.Services
 {
-    public class EmailSender : IEmailSender
+    public class EmailSender : IMailService
     {
-        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
+
+        private IConfiguration _configuration;
+
+        public EmailSender( IConfiguration configuration)
         {
-            Options = optionsAccessor.Value;
+            
+            _configuration = configuration;
         }
 
-        public AuthMessageSenderOptions Options { get; } //set only via Secret Manager
+        
 
-        public Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string email, string subject, string message)
         {
-            return Execute(Options.SendGridKey, subject, message, email);
-        }
-
-        public Task Execute(string apiKey, string subject, string message, string email)
-        {
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
+            try
             {
-                From = new EmailAddress("sean.s.anastasi@gmail.com", Options.SendGridUser),
-                Subject = subject,
-                PlainTextContent = message,
-                HtmlContent = message
-            };
-            msg.AddTo(new EmailAddress(email));
+                var apiKey = _configuration["SendGridAPIKey"];
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress("nemesysmt@gmail.com", "Nemesys");
 
-            // Disable click tracking.
-            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
-            msg.SetClickTracking(false, false);
+                var to = new EmailAddress(email);
 
-            return client.SendEmailAsync(msg);
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, message, message);
+                var response = await client.SendEmailAsync(msg);
+            }catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            
         }
     }
 }

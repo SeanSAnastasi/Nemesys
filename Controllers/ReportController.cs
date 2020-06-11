@@ -28,17 +28,52 @@ namespace Nemesys.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
         }
-        public IActionResult Index(string searchS)
+        [HttpGet]
+        public IActionResult Index()
         {
+
             var report = _context.Report.Include(report => report.Reporter)
                 .Include(report => report.Reporter.User).ToList();
-            if (!String.IsNullOrEmpty(searchS))
+
+            ReportIndexViewModel reportIndex = new ReportIndexViewModel
             {
-                report = _context.Report.Include(report => report.Reporter)
+                Report = report
+            };
+
+            return View(reportIndex);
+        }
+
+        [HttpPost]
+        public IActionResult Index(string searchS)
+        {
+            if(searchS != null)
+            {
+                var report = _context.Report.Include(report => report.Reporter)
                  .Include(report => report.Reporter.User).Where(r => r.Title.Contains(searchS)).ToList();
-                return View(report);
+
+
+                ReportIndexViewModel reportIndex = new ReportIndexViewModel
+                {
+                    Report = report
+                };
+                return View(reportIndex);
             }
-            return View(report);
+            else
+            {
+                var report = _context.Report.Include(report => report.Reporter)
+                .Include(report => report.Reporter.User).ToList();
+
+                ReportIndexViewModel reportIndex = new ReportIndexViewModel
+                {
+                    Report = report
+                };
+
+                return View(reportIndex);
+            }
+            
+                
+
+            
         }
 
         [HttpGet]
@@ -206,19 +241,29 @@ namespace Nemesys.Controllers
               }*/
             if (_signInManager.IsSignedIn(User))
             {
+                var fullpath = "";
+                try
+                {
+                    var thispath = Directory.GetCurrentDirectory() + "\\wwwroot\\images\\repo\\";
+                    var fName = Path.GetFileNameWithoutExtension(newReport.ImageLocation.FileName);
+                    var ext = Path.GetExtension(newReport.ImageLocation.FileName);
+                    //make unique
+                    fullpath = DateTime.Now.ToString("MMyyyyddss") + fName + ext; // seperate to make it easy to change order if needed
+                    var custfullpath = thispath + fullpath;                                                  // fullpath into bits
+                    using (var bits = new FileStream(custfullpath, FileMode.Create))
+                    {
+                        await newReport.ImageLocation.CopyToAsync(bits);
+                    }
+                    Console.WriteLine(fullpath);
+                }
+                catch(Exception e)
+                {
 
-            var thispath = Directory.GetCurrentDirectory()+ "\\wwwroot\\images\\repo\\" ;
-            var fName = Path.GetFileNameWithoutExtension(newReport.ImageLocation.FileName);
-            var ext = Path.GetExtension(newReport.ImageLocation.FileName);
-                //make unique
-            var fullpath =  DateTime.Now.ToString("MMyyyyddss") + fName + ext; // seperate to make it easy to change order if needed
-                var custfullpath = thispath + fullpath;                                                  // fullpath into bits
-                using (var bits = new FileStream(custfullpath, FileMode.Create)){
-                   await newReport.ImageLocation.CopyToAsync(bits) ;
-                }    
+                }
+            
          
                 // var bits = new FileStream(thispath,s FileMode.Create);
-                Console.WriteLine(fullpath);
+                
                 User user = await _userManager.GetUserAsync(User);
                 Reporter reporter = _context.Reporter.SingleOrDefault(c => c.User.Id == user.Id);
                 
