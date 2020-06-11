@@ -157,5 +157,30 @@ namespace Nemesys.Controllers
             }
                     return Unauthorized();
         }
+        public async Task<IActionResult> MyInvestigations()
+        {
+
+            if (_signInManager.IsSignedIn(User))
+            {
+                User user = await _userManager.GetUserAsync(User);
+                var investigation = _context.Investigation.Include(investigation => investigation.Report)
+                                                            .Include(investigation => investigation.Investigator)
+                                                                .Include(investigation => investigation.Investigator.User)
+                                                                    .ToList();
+
+                InvestigationViewModel investigationView = new InvestigationViewModel
+                {
+                    Investigation = investigation
+                };
+
+                return View(investigationView);
+            }
+            else
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+
+
+        }
     }
 }
