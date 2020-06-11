@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Nemesys.Areas.Identity.Data;
 using Nemesys.ViewModels;
 using System.IO;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Nemesys.Controllers
 {
@@ -32,44 +33,64 @@ namespace Nemesys.Controllers
         public IActionResult Index()
         {
 
-            var report = _context.Report.Include(report => report.Reporter)
+            if (_signInManager.IsSignedIn(User))
+            {
+
+                var report = _context.Report.Include(report => report.Reporter)
                 .Include(report => report.Reporter.User).ToList();
 
-            ReportIndexViewModel reportIndex = new ReportIndexViewModel
-            {
-                Report = report
-            };
+                ReportIndexViewModel reportIndex = new ReportIndexViewModel
+                {
+                    Report = report
+                };
 
-            return View(reportIndex);
+                return View(reportIndex);
+            }
+            else
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+
+            
         }
 
         [HttpPost]
         public IActionResult Index(string searchS)
         {
-            if(searchS != null)
+            if (_signInManager.IsSignedIn(User))
             {
-                var report = _context.Report.Include(report => report.Reporter)
-                 .Include(report => report.Reporter.User).Where(r => r.Title.Contains(searchS)).ToList();
 
-
-                ReportIndexViewModel reportIndex = new ReportIndexViewModel
+                if (searchS != null)
                 {
-                    Report = report
-                };
-                return View(reportIndex);
+                    var report = _context.Report.Include(report => report.Reporter)
+                     .Include(report => report.Reporter.User).Where(r => r.Title.Contains(searchS)).ToList();
+
+
+                    ReportIndexViewModel reportIndex = new ReportIndexViewModel
+                    {
+                        Report = report
+                    };
+                    return View(reportIndex);
+                }
+                else
+                {
+                    var report = _context.Report.Include(report => report.Reporter)
+                    .Include(report => report.Reporter.User).ToList();
+
+                    ReportIndexViewModel reportIndex = new ReportIndexViewModel
+                    {
+                        Report = report
+                    };
+
+                    return View(reportIndex);
+                }
             }
             else
             {
-                var report = _context.Report.Include(report => report.Reporter)
-                .Include(report => report.Reporter.User).ToList();
-
-                ReportIndexViewModel reportIndex = new ReportIndexViewModel
-                {
-                    Report = report
-                };
-
-                return View(reportIndex);
+                return Redirect("/Identity/Account/Login");
             }
+
+         
             
                 
 
@@ -79,15 +100,24 @@ namespace Nemesys.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var report = _context.Report
-                .Include(report => report.Reporter)
-                    .Include(report => report.Reporter.User)
-                         .SingleOrDefault(c => c.Id == id);
-            if (report == null)
+            if (_signInManager.IsSignedIn(User))
             {
-                return NotFound();
+
+                var report = _context.Report
+                    .Include(report => report.Reporter)
+                         .Include(report => report.Reporter.User)
+                             .SingleOrDefault(c => c.Id == id);
+                if (report == null)
+                {
+                    return NotFound();
+                }
+                return View(report);
             }
-            return View(report);
+            else
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+
         }
         public async Task<IActionResult> Delete(int id)
         {
@@ -133,7 +163,9 @@ namespace Nemesys.Controllers
                     {
                         Title = report.Title,
                         Description = report.Description,
-                        Location = report.Location
+                        Location = report.Location,
+                        HazardType = report.HazardType
+
 
                     };
                     return View(reportModel);
@@ -214,6 +246,7 @@ namespace Nemesys.Controllers
                     report.Title = editReport.Title;
                     report.Description = editReport.Description;
                     report.Location = editReport.Location;
+                    report.HazardType = editReport.HazardType;
 
                     _context.SaveChanges();
                 }
@@ -225,8 +258,15 @@ namespace Nemesys.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            CreateReport report = new CreateReport();
-            return View(report);
+            if (_signInManager.IsSignedIn(User))
+            {
+                CreateReport report = new CreateReport();
+                return View(report);
+            }
+            else
+            {
+                return Redirect("/Identity/Account/Login");
+            }
         }
 
        
@@ -293,7 +333,37 @@ namespace Nemesys.Controllers
             
         }
 
-      
+
+
+        public async Task<IActionResult> MyReports()
+        {
+
+            if (_signInManager.IsSignedIn(User))
+            {
+                User user = await _userManager.GetUserAsync(User);
+                var report = _context.Report.Include(report => report.Reporter)
+                .Include(report => report.Reporter.User).Where(report => report.Reporter.User == user).ToList();
+
+                ReportIndexViewModel reportIndex = new ReportIndexViewModel
+                {
+                    Report = report
+                };
+
+                return View(reportIndex);
+            }
+            else
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+
+
+        }
+
+
+
 
     }
+
+
+
 }

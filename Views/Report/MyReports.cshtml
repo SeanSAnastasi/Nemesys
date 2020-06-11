@@ -1,0 +1,61 @@
+﻿
+@model Nemesys.ViewModels.ReportIndexViewModel
+@using Microsoft.AspNetCore.Identity
+@using Nemesys.Areas.Identity.Data
+@using System.Security.Claims;
+@using System.Collections;
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject NemesysDBContext _context
+@{
+    ViewData["Title"] = "Reports";
+    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var uniqueInvestigationCheck = _context.Investigation.ToList();
+    ArrayList myList = new ArrayList();
+
+
+}
+<div class="container">
+    <h1 class="text-center display-4  mb-3 megrim">My Reports </h1>
+
+    <div class="row text-center border-bottom pb-4">
+      
+
+        @foreach (var report in Model.Report) { 
+
+       
+
+            <div class="report-card mt-1">
+                <div class="row text-left">
+
+                    <p class="col-sm-8 text-left h4">@report.Title</p>
+                    <div class=" col-sm-2 text-right">
+                        <a class="btn btn-outline-info" asp-controller="Report" asp-action="Like" asp-route-id="@report.Id">
+                            <i class="far fa-heart"> <span class=""> @report.Likes </span>  </i>
+                        </a>
+                    </div>
+                    <div class="limited-height text-left col-sm-12 p-2"> <p class="rep-description">@report.Description</p> </div>
+
+
+                </div>
+                <div class="container col-sm-12 p-3">
+                   
+                    
+                        <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
+                        <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
+                    
+                  
+                           
+                            
+                       
+                   
+
+                    <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
+                </div>
+            </div>
+
+        }
+    </div>
+
+    

@@ -3,13 +3,13 @@
     ViewData["Title"] = "Details";
 }
 
-    <div class="container report-details border">
+    <div class="container  report-card report-details border">
         <div class="row">
-            <h1 class="mb-5 mt-3 col-sm-8">@Model.Title</h1>
-            <div class="text-left  col-sm-4">
-                <button class="p-3 m-2 btn btn-outline-info">
+            <h1 class="mb-5 mt-3 col-xs-10  col-md-10 h4">@Model.Title</h1>
+            <div class="col-xs-2  col-md-2">
+                <a class="btn btn-outline-info" asp-controller="Report" asp-action="Like" asp-route-id="@Model.Id">
                     <i class="far fa-heart"> <span class=""> @Model.Likes </span>  </i>
-                </button>
+                </a>
             </div>
         </div>
         <div class="container">
@@ -24,9 +24,10 @@
 
         <div class="flex">
             <div class="row border-bottom">
-                <div class="col-sm-3 border-right report-image"> <img src="@Model.ImageLocation" class="report-image" alt="Alternate Text" asp-append-version="true"/></div>
+              
+                <div class="col-sm-3  col-md-3 border-right report-image"> <img src="@Model.ImageLocation" class="report-image" alt="Alternate Text" asp-append-version="true"/></div>
 
-                <div class="col-sm-9 p-3">@Model.Description    </div>
+                <div class="col-sm-8 col-md-9">@Model.Description</div>
             </div>
         </div>
 
@@ -36,13 +37,13 @@
             <div class="reporter-details text-center">
                 <h5 class="">Created By</h5>
                 <div class="row text-center">
-                    <div class="col-sm-6 border"> <img class="report-image text-right" src="#" alt="Alternate Text" /> </div>
-                    <div class="col-sm-6">
+                    
+                    <div class="col-sm-6 signin-card text-center">
                         
                             
-                         <h4 class="text-left username">@Model.Reporter.User.UserName</h4>
+                         <p class="text-left username ">@Model.Reporter.User.UserName</p>
 
-                          <h4 class="text-left">@Model.Reporter.User.Email</h4>
+                          <p class="text-left ">@Model.Reporter.User.Email</p>
                         
 
                     </div>
