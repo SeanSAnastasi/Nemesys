@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace Nemesys.Services
 {
-    public class AuthMessageSenderOptions
+    public interface IMailService
     {
-        public string SendGridUser { get; set; }
-        public string SendGridKey { get; set; }
+        Task SendEmailAsync(string toEmail, string subject, string content);
     }
 }

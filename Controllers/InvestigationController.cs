@@ -7,6 +7,7 @@ using Nemesys.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Nemesys.Areas.Identity.Data;
+using Nemesys.ViewModels;
 
 namespace Nemesys.Controllers
 {
@@ -29,6 +30,8 @@ namespace Nemesys.Controllers
             _userManager = userManager;
 
         }
+
+        [HttpGet]
         public IActionResult Index()
         {
 
@@ -36,8 +39,54 @@ namespace Nemesys.Controllers
                 .Include(investigation => investigation.Investigator)
                 .Include(investigation => investigation.Investigator.User)
                 .ToList();
+            InvestigationViewModel investigationviewmodel = new InvestigationViewModel
+            {
+                Investigation = investigation,
+                
+            };
             Console.WriteLine(investigation.ToString());
-            return View(investigation);
+            return View(investigationviewmodel);
+        }
+
+        [HttpPost]
+        public IActionResult Index(string searchS)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+
+                if (searchS != null)
+                {
+                    var investigation = _context.Investigation.Include(investigation => investigation.Investigator)
+                     .Include(investigation => investigation.Investigator.User).Include(investigation => investigation.Report).Where(r => r.Report.Title.Contains(searchS)).ToList();
+
+
+                    InvestigationViewModel investigationviewmodel = new InvestigationViewModel
+                    {
+                        Investigation = investigation,
+
+                    };
+                    
+                    return View(investigationviewmodel);
+                }
+                else
+                {
+                   var investigation = _context.Investigation.Include(investigation => investigation.Report)
+                 .Include(investigation => investigation.Investigator)
+                 .Include(investigation => investigation.Investigator.User)
+                 .ToList();
+                    InvestigationViewModel investigationviewmodel = new InvestigationViewModel
+                    {
+                        Investigation = investigation,
+
+                    };
+                   
+                    return View(investigationviewmodel);
+                }
+            }
+            else
+            {
+                return Redirect("/Identity/Account/Login");
+            }
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -71,6 +120,7 @@ namespace Nemesys.Controllers
                                                         .Include(investigation => investigation.Reporter)
                                                             .Include(investigation => investigation.Investigator)
                                                                 .Include(investigation => investigation.Reporter.User)
+                                                                 .Include(investigation => investigation.Investigator.User)
                                                                     .SingleOrDefault(c => c.Id == id);
             if (investigation == null)
             {

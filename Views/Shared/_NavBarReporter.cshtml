@@ -34,7 +34,7 @@
                         <a id="manage navbarDropdown" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" >@UserManager.GetUserName(User)</a>
                         <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                             <a id="manage" class="nav-link dropdown-item" aria-expanded="false" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
-                            <a class="dropdown-item" href="#">My Reports</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="MyReports">My Reports</a>
                             <div class="dropdown-divider"></div>
                             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                 <button id="logout" type="submit" class="nav-link btn btn-link text-center dropdown-item">Logout</button>
