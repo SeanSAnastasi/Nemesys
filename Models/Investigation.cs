@@ -18,5 +18,6 @@ namespace Nemesys.Models
         [Required]
         public Investigator Investigator { get; set; }
 
+
     }
 }

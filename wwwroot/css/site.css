@@ -13,8 +13,21 @@ a.navbar-brand {
   text-align: center;
   word-break: break-all;
 }
+.navbar{
+    z-index:1;
+}
 .v-align{
     vertical-align:middle;
+}
+.limited-height {
+    max-height: 120px;
+    overflow: scroll;
+    padding-bottom:15px;
+}
+.rep-description {
+   
+    white-space: normal;
+    
 }
 .report-card {
     margin:auto;
@@ -25,13 +38,19 @@ a.navbar-brand {
     background-color: rgba(255,255,255,0.2);
     box-shadow: 0 .25rem .75rem #721c2440;
 }
-.activated{
-    border-bottom: 2px solid rgba(255,255,255,0.9);
-    background:blue;
+.signin-card {
+    margin: auto;
+    width: 90%;
+    padding: 50px;
+    background-color: gray;
+    background-color: rgba(255,255,255,0.2);
+    box-shadow: 0 .25rem .75rem #721c2440;
 }
-.activated-focused {
-    background-color:black;
-    border-bottom: 2px solid rgba(112, 0, 0, 0.74);
+.searchbar {
+   color:black;
+    background: !important rgb(255,188,0);
+    background: linear-gradient(94deg, rgba(255,188,0,1) 0%, rgba(236,236,236,1) 0%, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 54%, rgba(255,255,255,0) 82%, rgba(255,255,255,0.2413340336134454) 83%) !important;
+    border: 1px solid rgba(0,0,0,0);
 }
 .form-control-sm{
     background-color:rgba(0,0,0,0);
@@ -90,14 +109,15 @@ html {
   }
 }
 .report-details{
+    border:2px black;
     width:80%;
-    background:rgba(255,255,255,0.2)
+    background:rgba(255,255,255,0.2);
+}
 
-}
 .report-image{
-    height:200px;
-    width:200px;
+    width:100%;
 }
+
 .border{
     border:1px solid #721c2440;
 }
@@ -214,13 +234,35 @@ body {
 
 }
 @media only screen and (max-width:1000px){
+
+ 
+
+
     .report-card {
         width: 100%;
       
     }
+    .signin-card{
+        width:100%;
+    }
 }
 
 @media only screen and (max-width:550px){
+    .report-image {
+        width: 50%;
+    }
+
+    .investigation-image{
+        width:100%;
+    }
+
+    .limited-height {
+        max-height: 120px;
+        overflow: hidden;
+        padding-bottom: 30px;
+    }
+
+
         .box-shadow {
          background-color:white;    
     }
@@ -248,4 +290,12 @@ body {
             animation: animate 2.5s linear infinite;
             /*animation:animate 1.8s cubic-bezier(1,-0.01, 0.01, 0.93) infinite */
         }
+}
+
+.signup{
+    text-align:center;
+}
+
+.star {
+    color: #9900ff;
 }
