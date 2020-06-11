@@ -11,5 +11,44 @@ namespace Nemesys.ViewModels
         public String Description { get; set; }
 
         public String Location { get; set; }
+
+
+     
+        //public string Hazardtype { get; set; }
+
+        public string Details { get; set; }
+       
+     
+        public String HazardType { get; set; }
+  
+
     }
+    public enum HazardType
+    {
+        Dangerous,
+        Fair,
+        Minimal
+    }
+
+    public enum Location
+    {
+
+        Qawra,
+        Sliema,
+        Mosta,
+        Bormla,
+        Valletta,
+        Hamrun
+
+    }
+
+
+
+
+
+
+
+
+
 }
+

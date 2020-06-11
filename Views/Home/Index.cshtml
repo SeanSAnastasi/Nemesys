@@ -1,20 +1,38 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using Nemesys.Areas.Identity.Data
+@using System.Security.Claims;
+@using System.Collections;
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
+    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
 
-    
-    <div class="text-center mt-3 container">
-        <div id="ringa">
-            <img class="text-white" src="~/images/eye.png" alt="eye" id="eye" />
-            <h1 class="MainTitle megrim">NEMESYS</h1>
-            <div class="container">
 
-                <p>Near miss exposure | Reporting system</p>
-                <span></span>
-               
+<div class="text-center mt-3 container">
+    <div id="ringa">
+        <img class="text-white" src="~/images/eye.png" alt="eye" id="eye" />
+        <h1 class="MainTitle megrim">NEMESYS</h1>
+        <div class="container">
+
+            <p>Near miss exposure | Reporting system</p>
+            <span></span>
+            @if (userId != null)
+            {
                 <a asp-area="" asp-controller="Report" asp-action="Create" type="button" class="btn btn-outline-danger settotop">Start reporting now</a>
+            }
+            else
+            {
+                
+                <a id="login" asp-area="Identity" asp-page="/Account/Login" type="button" class="btn btn-outline-danger settotop">Start reporting now</a>
+            }
+
+
+
             </div>
-        </div>
     </div>
- 
+</div>

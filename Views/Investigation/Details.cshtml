@@ -12,7 +12,7 @@
 
 
         <div class="row text-center">
-            <h1 class="mb-5 mt-3 col-sm-12">@Model.Report.Title</h1>
+            <h1 class="mb-5 mt-3 col-sm-12 megrim">@Model.Report.Title</h1>
         </div>
 
 
@@ -20,12 +20,12 @@
 
 
 
-            <div class="col-sm-4">
-                <h3>PLACE TITLE HERE</h3>
+            <div class="col-sm-4 col-xs-12">
+                <div class="border-right report-image investigation-image"> <img src="@Model.Report.ImageLocation" class="report-image investigation-image" alt="Alternate Text" asp-append-version="true" /></div>
                 <p class="investigation-date">@Model.StartDate</p>
             </div>
 
-            <div class="col-sm-8">
+            <div class="col-sm-8 col-xs-12">
                 <div class="investigation-details">
                     <p class="investigation-description">@Model.Report.Description</p>
                    
@@ -40,24 +40,21 @@
 
 
 
-
-
-
         <div class="row border-bottom">
-            <div class="reporter-details col-sm-6">
+            <div class="reporter-details col-sm-6 signin-card">
 
-                <img class="report-image text-right" src="#" alt="Alternate Text" />
-                <h3 class="username">Reporter: @Model.Reporter.User.UserName</h3>
+               
+                <p class="username h5">Reporter<br /><span class="font-italic h6">@Model.Reporter.User.UserName</span> </p>
                 <p class="details">Active reports: @Model.Reporter.ActiveReports</p>
                 <p class="details">Handled reports: @Model.Reporter.HandledReports</p>
 
             </div>
 
-            <div class="investigator-details col-sm-6">
-                <img class="report-image text-right" src="#" alt="Alternate Text" />
-                <h3 class="username">Investigator: @Model.Investigator.User.UserName</h3>
+            <div class="investigator-details col-sm-6 signin-card">
+              
+                <p class="username h5">Investigator<br /><span class="font-italic h6">  @Model.Investigator.User.UserName</span> </p>
                 <p class="details">Active Investigations: @Model.Investigator.ActiveInvestigations</p>
-                <p class="details"> @(Model.Investigator.TotalInvestigations - Model.Investigator.ActiveInvestigations)</p>
+                <p class="details">Pending Investigations: @(Model.Investigator.TotalInvestigations - Model.Investigator.ActiveInvestigations)</p>
             </div>
 
         </div>
