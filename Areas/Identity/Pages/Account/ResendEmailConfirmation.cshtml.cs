@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Nemesys.Areas.Identity.Data;
+using Nemesys.Services;
 
 namespace Nemesys.Areas.Identity.Pages.Account
 {
@@ -18,9 +19,9 @@ namespace Nemesys.Areas.Identity.Pages.Account
     public class ResendEmailConfirmationModel : PageModel
     {
         private readonly UserManager<User> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IMailService _emailSender;
 
-        public ResendEmailConfirmationModel(UserManager<User> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(UserManager<User> userManager, IMailService emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;

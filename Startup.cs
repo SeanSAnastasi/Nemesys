@@ -35,8 +35,8 @@ namespace Nemesys
             services.AddControllersWithViews();
             services.AddRazorPages();
             
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.AddTransient<IMailService, EmailSender>();
+           
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
