@@ -2,39 +2,63 @@
 @{
     ViewData["Title"] = "Details";
 }
+    <div class="report-card border">
 
-<h1>@Model.Report.Title</h1>
-
-<div class="investigation-block">
-    <div class="investigation-left">
-        <h3>PLACE TITLE HERE</h3>
-        <p class="investigation-date">@Model.StartDate</p>
-    </div>
-    <div class="investigation-right">
-        <div class="investigation-details">
-            <p class="investigation-description">@Model.Report.Description</p>
-            <button>Investigate</button>
-            
-        </div>
-        <div class="investigation-status">
-            <p>@Model.Report.Status</p>
+        <div class="row border-bottom text-center pb-3">
+            <div class="col-sm-12">
+                <p>@Model.Report.Status</p>
+            </div>
         </div>
 
-    </div>
-</div>
-<div class="user-details">
 
-    <div class="reporter-details">
-        <img src="#" alt="Alternate Text" />
-        <h3 class="username">@Model.Reporter.Username</h3>
-        <p class="details">@Model.Reporter.ActiveReports</p>
-        <p class="details">@Model.Reporter.HandledReports</p>
-    </div>
-    <div class="investigator-details">
-        <img src="#" alt="Alternate Text" />
-        <h3 class="username">@Model.Investigator.Username</h3>
-        <p class="details">@Model.Investigator.ActiveInvestigations</p>
-        <p class="details">@(Model.Investigator.TotalInvestigations - Model.Investigator.ActiveInvestigations)</p>
-    </div>
+        <div class="row text-center">
+            <h1 class="mb-5 mt-3 col-sm-12">@Model.Report.Title</h1>
+        </div>
 
-</div>
+
+        <div class="row border-bottom">
+
+
+
+            <div class="col-sm-4">
+                <h3>PLACE TITLE HERE</h3>
+                <p class="investigation-date">@Model.StartDate</p>
+            </div>
+
+            <div class="col-sm-8">
+                <div class="investigation-details">
+                    <p class="investigation-description">@Model.Report.Description</p>
+                   
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center mt-sm-5 mb-sm-5">
+                <button class="btn btn-outline-dark">Investigate</button>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="row border-bottom">
+            <div class="reporter-details col-sm-6">
+
+                <img class="report-image text-right" src="#" alt="Alternate Text" />
+                <h3 class="username">Reporter: @Model.Reporter.User.UserName</h3>
+                <p class="details">Active reports: @Model.Reporter.ActiveReports</p>
+                <p class="details">Handled reports: @Model.Reporter.HandledReports</p>
+
+            </div>
+
+            <div class="investigator-details col-sm-6">
+                <img class="report-image text-right" src="#" alt="Alternate Text" />
+                <h3 class="username">Investigator: @Model.Investigator.User.UserName</h3>
+                <p class="details">Active Investigations: @Model.Investigator.ActiveInvestigations</p>
+                <p class="details"> @(Model.Investigator.TotalInvestigations - Model.Investigator.ActiveInvestigations)</p>
+            </div>
+
+        </div>
+    </div>

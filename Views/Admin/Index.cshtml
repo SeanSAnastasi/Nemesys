@@ -1,0 +1,95 @@
+﻿@model Nemesys.ViewModels.AdminIndex
+@inject NemesysDBContext _context
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var uniqueInvestigationCheck = _context.Investigation.ToList();
+    Investigation investigationUsed = null;
+}
+<h1>Admin Page</h1>
+@if (Model.Investigations.Count == 0)
+{
+    <h3>There are no investigations</h3>
+}
+else
+{
+
+    @foreach (Investigation investigation in Model.Investigations)
+    {
+        <div class="report-card mt-3 mb-2">
+            <div class="container row">
+                <div class="col-sm-4">
+                    <h4>Title</h4>
+                    <p class="investigation-date">@investigation.StartDate</p>
+                </div>
+
+
+                <div class="col-sm-8">
+                    <div class="investigation-details">
+                        <p class="investigation-description">@investigation.Report.Description</p>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row text-center">
+                <span class="col-2"></span>
+                <button class=" col-md-4 btn btn-outline-success">Investigate</button>
+                <a class=" col-md-4 btn btn-outline-dark details-cta details-cta " asp-area="" asp-controller="Investigation" asp-action="Details" asp-route-id="@investigation.Id">View Details</a>
+                <span class="col-2"></span>
+            </div>
+            <div class="row border-top text-center">
+                <div class="col-sm-12 pt-4 mt-3"><p class="status">@investigation.Report.Status</p></div>
+            </div>
+
+        </div>
+    }
+
+}
+@if (Model.Reports.Count == 0)
+{
+    <h3>There are no reports</h3>
+}
+else
+{
+
+    @foreach (Report report in Model.Reports)
+    {
+        investigationUsed = null;
+        foreach (var investigation in uniqueInvestigationCheck)
+        {
+            if (investigation.Report.Id == report.Id)
+            {
+                investigationUsed = investigation;
+
+            }
+
+        }
+        <div class="report-card mt-1">
+            <div class="container row">
+                <div class="col-10">
+                    <h4>@report.Title</h4>
+                    <p>@report.Description</p>
+                </div>
+                <div class="col-2">
+                    <button class="p-4 m-3 btn btn-outline-info">
+                        <i class="far fa-heart"> <span class=""> @report.Likes </span>  </i>
+
+
+                    </button>
+                </div>
+            </div>
+            <div class="container">
+                <a class="btn btn-outline-success" asp-area="" asp-controller="Report" asp-action="Edit" asp-route-id="@report.Id">Edit</a>
+                <a class="btn btn-outline-danger" asp-area="" asp-controller="Report" asp-action="Delete" asp-route-id="@report.Id">Delete</a>
+                @if (investigationUsed == null)
+                {
+                    <a class="btn btn-outline-info" asp-area="" asp-controller="Admin" asp-action="Assign" asp-route-id="@report.Id">Assign</a>
+                }
+                <a class="btn btn-outline-dark details-cta" asp-area="" asp-controller="Report" asp-action="Details" asp-route-id="@report.Id">View Details</a>
+            </div>
+        </div>
+    }
+
+}
+

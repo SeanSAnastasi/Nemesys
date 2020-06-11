@@ -1,0 +1,32 @@
+﻿@model Nemesys.ViewModels.AdminCreate
+
+
+<form asp-action="Create" asp-controller="Admin" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="UserName" class="col-md-2"></label>
+        <div class="col-md-10">
+            <input asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+
+        <label asp-for="UserType" class="col-md-2"></label>
+        <div class="col-md-10">
+            <select asp-for="UserType" class="form-control">
+                <option value="Reporter">Reporter</option>
+                <option value="Investigator">Investigator</option>
+                <option value="Administrator">Administrator</option>
+            </select>
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+
+    </div>
+    
+    <div class="form-group">
+        <div class="offset-2 col-md-10">
+            <input type="submit" class="btn btn-primary" value="Register" />
+        </div>
+    </div>
+</form>

@@ -17,5 +17,6 @@ namespace Nemesys.Models
         public Report Report { get; set; }
         [Required]
         public Investigator Investigator { get; set; }
+
     }
 }

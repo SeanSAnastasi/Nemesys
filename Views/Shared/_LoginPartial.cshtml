@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Nemesys.Areas.Identity.Data
+@using System.Linq
+@using System.Security.Claims;
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject NemesysDBContext _context
+@{
+    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    var reporter = _context.Reporter.SingleOrDefault(c => c.User.Id == userId);
+    var investigator = _context.Investigator.SingleOrDefault(c => c.User.Id == userId);
+    var admin = _context.Admin.SingleOrDefault(c => c.User.Id == userId);
+}
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @*  Choose user type if reporter or investigator *@
+    @*
+        <li class="nav-item">
+            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+        </li>
+        <li class="nav-item">
+            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </li>
+    *@
+
+    @if (admin != null)
+    {
+        <partial name="_NavBarAdmin" />
+    }
+    else if (investigator != null)
+    {
+        <partial name="_NavBarInvestigator" />
+    }
+    else if (reporter != null)
+    {
+        <partial name="_NavBarReporter" />
+    }
+
+
+
+
+}
+else
+{
+    <partial name="_NavBar" />
+}
+
+
+
