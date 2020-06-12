@@ -11,22 +11,22 @@ namespace Nemesys.Models
     {
         public int Id { get; set; }
 
-        [StringLength(25, MinimumLength = 10)]
-        [RegularExpression(@"^[a-zA-Z]*$")]
-        [Required]
+        [StringLength(25, MinimumLength = 4, ErrorMessage = "Minimum Title Length 4")]
+        [RegularExpression(@"^[a-zA-Z, ]*$", ErrorMessage = "Invalid Input - Title")]
+        [Required(ErrorMessage ="Title is Required")]
         public string Title { get; set; }
         public Reporter Reporter { get; set; }
         //public string Hazardtype { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z]*$")]
-        [StringLength(1000, MinimumLength = 25)]
-        [Required]
+        [RegularExpression(@"^[a-zA-Z,/n ]*$", ErrorMessage = "Invalid Input - Details")]
+        [StringLength(1000, MinimumLength = 25, ErrorMessage = "Minimum Description Length 25")]
+        [Required(ErrorMessage = "Please fill in the Details")]
         public string Details { get; set; }
 
         public string Location { get; set; }
 
 
-        [Required]
+        
         public Microsoft.AspNetCore.Http.IFormFile ImageLocation { get; set; }
 
     

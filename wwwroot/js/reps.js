@@ -3,6 +3,9 @@
 var card = document.getElementsByClassName("report-card");
 
 
+//This content isnt being used - this was done simply to change the background col depending on the
+// status of the investigation
+
 //var Mine_Option = document.getElementById("Mine");
 //var Available_Option = document.getElementById("Available");
 //var All_Option = document.getElementById("all");
@@ -85,15 +88,15 @@ function statuscolor(statustext) {
 
         card[i].setattribute("id", "open-rep");
         i++;
-        change color to green
+        //change color to green
     } else if (statustext == 'in progress') {
         card[i].setattribute("id", "prog-rep");
         i++;
-        change color to orange
+        //change color to orange
     } else {
         card[i].setattribute("id", "done-rep");
         i++;
-        change color to red
+        //change color to red
     }
 }
 if (card != null) {

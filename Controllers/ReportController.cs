@@ -10,6 +10,7 @@ using Nemesys.Areas.Identity.Data;
 using Nemesys.ViewModels;
 using System.IO;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Logging;
 
 namespace Nemesys.Controllers
 {
@@ -18,16 +19,22 @@ namespace Nemesys.Controllers
         private NemesysDBContext _context;
         private  SignInManager<User> _signInManager;
         private  UserManager<User> _userManager;
+        private readonly ILogger<ReportController> _logger;
 
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
         }
-        public ReportController(NemesysDBContext context, UserManager<User> userManager, SignInManager<User> signInManager)
+        
+
+        public ReportController(NemesysDBContext context, UserManager<User> userManager, SignInManager<User> signInManager, ILogger<ReportController> logger)
         {
             _context = context;
             _signInManager = signInManager;
             _userManager = userManager;
+            _logger = logger;
+
+
         }
         [HttpGet]
         public IActionResult Index()
@@ -70,6 +77,7 @@ namespace Nemesys.Controllers
                     {
                         Report = report
                     };
+                    _logger.LogInformation($"User Searched for {searchS}");
                     return View(reportIndex);
                 }
                 else
@@ -81,7 +89,7 @@ namespace Nemesys.Controllers
                     {
                         Report = report
                     };
-
+                    _logger.LogInformation($"User Search query was null");
                     return View(reportIndex);
                 }
             }
@@ -115,6 +123,7 @@ namespace Nemesys.Controllers
             }
             else
             {
+                _logger.LogInformation($"User tryed to access page without loging in" );
                 return Redirect("/Identity/Account/Login");
             }
 
@@ -140,6 +149,7 @@ namespace Nemesys.Controllers
                         _context.Investigation.Remove(investigation);
                         report.Reporter.ActiveReports--;
                     }
+                    _logger.LogInformation($"successfully deleted report: {report.Title}");
                     _context.Report.Remove(report);
                     _context.SaveChanges();
                 }
@@ -272,6 +282,7 @@ namespace Nemesys.Controllers
        
 
         [HttpPost]
+        
         public async Task<IActionResult> Create([Bind("Title","Date","HazardType","Status","Location","Details","ImageLocation","Likes")] CreateReport newReport)
         {
             /*  if (ModelState.IsValid)
@@ -281,87 +292,142 @@ namespace Nemesys.Controllers
               }*/
             if (_signInManager.IsSignedIn(User))
             {
-                var fullpath = "";
-                try
+                if (ModelState.IsValid)
                 {
-                    var thispath = Directory.GetCurrentDirectory() + "\\wwwroot\\images\\repo\\";
-                    var fName = Path.GetFileNameWithoutExtension(newReport.ImageLocation.FileName);
-                    var ext = Path.GetExtension(newReport.ImageLocation.FileName);
-                    //make unique
-                    fullpath = DateTime.Now.ToString("MMyyyyddss") + fName + ext; // seperate to make it easy to change order if needed
-                    var custfullpath = thispath + fullpath;                                                  // fullpath into bits
-                    using (var bits = new FileStream(custfullpath, FileMode.Create))
+                    var fullpath = "";
+                    try
                     {
-                        await newReport.ImageLocation.CopyToAsync(bits);
+                        var fName = "";
+                        var thispath = Directory.GetCurrentDirectory() + "\\wwwroot\\images\\repo\\";
+                        if (newReport.ImageLocation != null)
+                        {
+                            fName = Path.GetFileNameWithoutExtension(newReport.ImageLocation.FileName);
+                        }
+                        else
+                        {
+                            fName = "0";
+                        }
+                        if (fName != "0")
+                        {
+                            var ext = Path.GetExtension(newReport.ImageLocation.FileName);
+                            //make unique
+                            fullpath = DateTime.Now.ToString("MMyyyyddss") + fName + ext; // seperate to make it easy to change order if needed
+                            var custfullpath = thispath + fullpath;                                                  // fullpath into bits
+                            using (var bits = new FileStream(custfullpath, FileMode.Create))
+                            {
+                                await newReport.ImageLocation.CopyToAsync(bits);
+                            }
+                            Console.WriteLine(fullpath);
+                        }
+                        else
+                        {
+                            fullpath = null;
+                        }
                     }
-                    Console.WriteLine(fullpath);
-                }
-                catch(Exception e)
-                {
+                    catch (Exception e)
+                    {
+                        _logger.LogError($"Exception thrown :  {e}");
+                    }
 
-                }
-            
-         
-                // var bits = new FileStream(thispath,s FileMode.Create);
-                
-                User user = await _userManager.GetUserAsync(User);
-                Reporter reporter = _context.Reporter.SingleOrDefault(c => c.User.Id == user.Id);
-                
-                
-                if(reporter != null){
-                Report report = new Report()
-                {
-                    
-                    Title = newReport.Title,
-                    Date = DateTime.UtcNow,
-                    ImageLocation = "/images/repo/"+fullpath,
-                    Status = "In Progress",
-                    Description = newReport.Details,
-                    Location = newReport.Location,
-                    HazardType = newReport.HazardType,
-                    Reporter = reporter,
-                    Likes = 0
 
-                };
-                    Console.WriteLine(newReport.HazardType);
-                reporter.PendingReports++;
-                _context.Report.Add(report);
-                _context.SaveChanges();
+                    // var bits = new FileStream(thispath,s FileMode.Create);
+
+                    User user = await _userManager.GetUserAsync(User);
+                    Reporter reporter = _context.Reporter.SingleOrDefault(c => c.User.Id == user.Id);
+
+
+                    if (reporter != null)
+                    {
+
+                        if (fullpath != null)
+                        {
+                            Report report = new Report()
+                            {
+
+                                Title = newReport.Title,
+                                Date = DateTime.UtcNow,
+                                ImageLocation = "/images/repo/" + fullpath,
+                                Status = "In Progress",
+                                Description = newReport.Details,
+                                Location = newReport.Location,
+                                HazardType = newReport.HazardType,
+                                Reporter = reporter,
+                                Likes = 0
+
+                            };
+                            Console.WriteLine(newReport.HazardType);
+                            reporter.PendingReports++;
+                            _context.Report.Add(report);
+                            _context.SaveChanges();
+                            _logger.LogInformation($"Successfully created new report {report.Title}");
+                        }
+                        else
+                        {
+                            Report report = new Report()
+                            {
+
+                                Title = newReport.Title,
+                                Date = DateTime.UtcNow,
+                                ImageLocation = null,
+                                Status = "Open",
+                                Description = newReport.Details,
+                                Location = newReport.Location,
+                                HazardType = newReport.HazardType,
+                                Reporter = reporter,
+                                Likes = 0
+                            };
+                            _logger.LogInformation($"Successfully created new report {report.Title}");
+                            Console.WriteLine(newReport.HazardType);
+                            reporter.PendingReports++;
+                            _context.Report.Add(report);
+                            _context.SaveChanges();
+                        }
+
+                    }
+                }
+                else
+                {
+                    return View(newReport);
+                }
+                
+
             }
-            }
+      
             return RedirectToAction("Index");
-            
         }
 
 
 
         public async Task<IActionResult> MyReports()
         {
-
-            if (_signInManager.IsSignedIn(User))
+            try
             {
-                User user = await _userManager.GetUserAsync(User);
-                var report = _context.Report.Include(report => report.Reporter)
-                .Include(report => report.Reporter.User).Where(report => report.Reporter.User == user).ToList();
-
-                ReportIndexViewModel reportIndex = new ReportIndexViewModel
+                if (_signInManager.IsSignedIn(User))
                 {
-                    Report = report
-                };
+                    User user = await _userManager.GetUserAsync(User);
+                    
+                    var report = _context.Report.Include(report => report.Reporter)
+                    .Include(report => report.Reporter.User).Where(report => report.Reporter.User == user).ToList();
 
-                return View(reportIndex);
-            }
-            else
+                    ReportIndexViewModel reportIndex = new ReportIndexViewModel
+                    {
+                        Report = report
+                    };
+                    _logger.LogInformation($"User {user} accessed - My reports page");
+                    return View(reportIndex);
+                }
+                else
+                {
+                    return Redirect("/Identity/Account/Login");
+                }
+
+            }catch(Exception err)
             {
-                return Redirect("/Identity/Account/Login");
+                _logger.LogWarning($"Exception occured: {err}");
+                return View("Index");
             }
-
-
+        
         }
-
-
-
-
     }
 
 
